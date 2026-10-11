@@ -33,7 +33,9 @@ live("live Claude API", () => {
       effort: "low",
       schema,
       maxTokens: 2000,
-      messages: [{ role: "user", content: "What is the capital of Utah's country? Answer for the USA." }],
+      messages: [
+        { role: "user", content: "What is the capital of Utah's country? Answer for the USA." },
+      ],
     });
     spent += result.costUsd;
     expect(result.refusal).toBeNull();
@@ -55,7 +57,8 @@ live("live Claude API", () => {
       tools,
       handlers,
       maxTokens: 4000,
-      system: "Use the get_snow_depth tool whenever a question needs a snow depth. Never guess one.",
+      system:
+        "Use the get_snow_depth tool whenever a question needs a snow depth. Never guess one.",
       messages: [{ role: "user", content: "How deep is the snow at Alta right now?" }],
     });
     spent += first.costUsd;
@@ -75,7 +78,8 @@ live("live Claude API", () => {
       tools,
       handlers,
       maxTokens: 4000,
-      system: "Use the get_snow_depth tool whenever a question needs a snow depth. Never guess one.",
+      system:
+        "Use the get_snow_depth tool whenever a question needs a snow depth. Never guess one.",
       messages: followUp,
     });
     spent += second.costUsd;

@@ -13,7 +13,10 @@ function headers(apiKey: string | null): HeadersInit {
   };
 }
 
-const NETWORK_ERROR = { kind: "server" as ErrorKind, message: "Network error. Check your connection." };
+const NETWORK_ERROR = {
+  kind: "server" as ErrorKind,
+  message: "Network error. Check your connection.",
+};
 
 export async function callApi<D>(
   path: string,

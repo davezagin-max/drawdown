@@ -14,13 +14,7 @@ import { findFixture, requestKey, type Fixture, type FixtureStore } from "./demo
 import { clientIp, createRateLimiter } from "./rate-limit";
 
 export type ErrorKind =
-  | "invalid"
-  | "too_large"
-  | "rate_limit"
-  | "auth"
-  | "refusal"
-  | "demo_miss"
-  | "server";
+  "invalid" | "too_large" | "rate_limit" | "auth" | "refusal" | "demo_miss" | "server";
 
 export interface ApiMeta {
   mode: "live" | "demo";
@@ -104,7 +98,7 @@ function liveMeta(result: LiveResult<unknown>): ApiMeta {
 }
 
 const MISS_MESSAGE =
-  "Demo mode only replays recorded runs. Pick one of the presets, or add your Anthropic key to run this live.";
+  "Demo mode only answers the presets. Pick one of them, or add your Anthropic key to run this live.";
 
 /** Shared front half of every route: rate limit, size cap, parse, validate. */
 function createGate<B>(config: RouteConfig<B>) {
@@ -241,16 +235,28 @@ export function streamRoute<B, D, E>(config: StreamRouteConfig<B, D, E>) {
     if (!client && !fixture) return fail(404, "demo_miss", MISS_MESSAGE);
 
     const encoder = new TextEncoder();
+    let open = true;
     const stream = new ReadableStream<Uint8Array>({
       async start(controller) {
+        // Once the visitor disconnects, enqueue throws. Writes become no-ops instead, so a
+        // late event from a long-running handler cannot crash the request.
         const send = (frame: StreamFrame<D, E>) => {
-          controller.enqueue(encoder.encode(`data: ${JSON.stringify(frame)}\n\n`));
+          if (!open) return;
+          try {
+            controller.enqueue(encoder.encode(`data: ${JSON.stringify(frame)}\n\n`));
+          } catch {
+            open = false;
+          }
         };
         try {
           if (fixture) {
             send({
               type: "meta",
-              meta: { mode: "demo", placeholder: fixture.placeholder, recordedAt: fixture.recordedAt },
+              meta: {
+                mode: "demo",
+                placeholder: fixture.placeholder,
+                recordedAt: fixture.recordedAt,
+              },
             });
             let clock = 0;
             for (const { at, event } of fixture.events ?? []) {
@@ -297,13 +303,21 @@ export function streamRoute<B, D, E>(config: StreamRouteConfig<B, D, E>) {
           send({
             type: "error",
             error: {
-              kind: mapped.status === 401 ? "auth" : mapped.status === 429 ? "rate_limit" : "server",
+              kind:
+                mapped.status === 401 ? "auth" : mapped.status === 429 ? "rate_limit" : "server",
               message: mapped.message,
             },
           });
         } finally {
-          controller.close();
+          try {
+            controller.close();
+          } catch {
+            // Already closed by the disconnect.
+          }
         }
+      },
+      cancel() {
+        open = false;
       },
     });
     return new Response(stream, { headers: SSE_HEADERS });

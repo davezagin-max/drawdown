@@ -41,9 +41,9 @@ export function stableStringify(value: unknown): string {
 export async function hashRequest(body: unknown): Promise<string> {
   const bytes = new TextEncoder().encode(stableStringify(body));
   const digest = await crypto.subtle.digest("SHA-256", bytes);
-  return Array.from(new Uint8Array(digest).slice(0, 8), (b) => b.toString(16).padStart(2, "0")).join(
-    "",
-  );
+  return Array.from(new Uint8Array(digest).slice(0, 8), (b) =>
+    b.toString(16).padStart(2, "0"),
+  ).join("");
 }
 
 const DEMO_ID = /^[a-z0-9][a-z0-9-]{0,63}$/;

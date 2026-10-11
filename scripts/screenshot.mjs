@@ -111,7 +111,14 @@ try {
     try {
       execFileSync(
         "ffmpeg",
-        ["-y", "-i", video, "-vf", "fps=12,scale=800:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer", gif],
+        [
+          "-y",
+          "-i",
+          video,
+          "-vf",
+          "fps=12,scale=800:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer",
+          gif,
+        ],
         { stdio: "ignore" },
       );
       console.log(`wrote ${gif}`);

@@ -143,7 +143,8 @@ export function clientFromRequest(req: Request): Anthropic | null {
   const key =
     header || (process.env.ALLOW_SERVER_KEY === "1" ? process.env.ANTHROPIC_API_KEY : undefined);
   if (!key) return null;
-  if (!KEY_PATTERN.test(key)) throw new MissingKeyError("That does not look like an Anthropic API key.");
+  if (!KEY_PATTERN.test(key))
+    throw new MissingKeyError("That does not look like an Anthropic API key.");
   // The SDK retries 408/409/429 and 5xx (including 529 overloaded) with exponential backoff.
   return new Anthropic({ apiKey: key, maxRetries: 4 });
 }

@@ -49,11 +49,19 @@ describe("jsonRoute", () => {
     expect((await route()(post("{not json"))).status).toBe(400);
     expect((await route()(post({ topic: 42 }))).status).toBe(400);
     const small = jsonRoute({ store: "x", fixtures, schema, live, maxBytes: 20 });
-    expect((await small(post({ topic: "this body is longer than twenty bytes" }))).status).toBe(413);
+    expect((await small(post({ topic: "this body is longer than twenty bytes" }))).status).toBe(
+      413,
+    );
   });
 
   it("rate limits per IP", async () => {
-    const limited = jsonRoute({ store: "x", fixtures, schema, live, rateLimit: { limit: 1, windowMs: 60_000 } });
+    const limited = jsonRoute({
+      store: "x",
+      fixtures,
+      schema,
+      live,
+      rateLimit: { limit: 1, windowMs: 60_000 },
+    });
     const headers = { "x-forwarded-for": "9.9.9.9" };
     expect((await limited(post({ demoId: "preset-1", topic: "a" }, headers))).status).toBe(200);
     const blocked = await limited(post({ demoId: "preset-1", topic: "a" }, headers));
@@ -73,7 +81,12 @@ describe("streamRoute", () => {
     const fixtures: FixtureStore<Data, { step: number }> = {
       "preset-1": fixture(
         { answer: "final" },
-        { events: [{ at: 0, event: { step: 1 } }, { at: 5, event: { step: 2 } }] },
+        {
+          events: [
+            { at: 0, event: { step: 1 } },
+            { at: 5, event: { step: 2 } },
+          ],
+        },
       ),
     };
     const route = streamRoute({ store: "x", fixtures, schema, live: vi.fn(), replaySpeed: 100 });
@@ -82,7 +95,9 @@ describe("streamRoute", () => {
     const frames = (await res.text())
       .split("\n\n")
       .filter(Boolean)
-      .map((chunk) => JSON.parse(chunk.replace(/^data: /, "")) as StreamFrame<Data, { step: number }>);
+      .map(
+        (chunk) => JSON.parse(chunk.replace(/^data: /, "")) as StreamFrame<Data, { step: number }>,
+      );
     expect(frames.map((frame) => frame.type)).toEqual(["meta", "event", "event", "done"]);
     expect(frames[1]).toEqual({ type: "event", event: { step: 1 } });
     expect(frames[3]).toMatchObject({ type: "done", data: { answer: "final" } });

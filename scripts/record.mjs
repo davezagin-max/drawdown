@@ -103,5 +103,7 @@ for (const preset of presets) {
     console.error(`FAILED    ${name}  ${message ?? `HTTP ${res.status}`}`);
   }
 }
-console.log(`\nTotal spent: $${spent.toFixed(4)} across ${presets.length} preset(s). Failures: ${failed}.`);
+console.log(
+  `\nTotal spent: $${spent.toFixed(4)} across ${presets.length} preset(s). Failures: ${failed}.`,
+);
 process.exit(failed ? 1 : 0);

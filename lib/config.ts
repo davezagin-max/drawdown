@@ -31,12 +31,30 @@ export const PRICING = {
   /** USD per million tokens. */
   perMTok: {
     "claude-opus-5-5": { input: 4, output: 20, cacheWrite5m: 5, cacheWrite1h: 8, cacheRead: 0.2 },
-    "claude-sonnet-5-5": { input: 2, output: 10, cacheWrite5m: 2.5, cacheWrite1h: 4, cacheRead: 0.1 },
+    "claude-sonnet-5-5": {
+      input: 2,
+      output: 10,
+      cacheWrite5m: 2.5,
+      cacheWrite1h: 4,
+      cacheRead: 0.1,
+    },
     // Haiku 5.5 rates for prompts up to 100K tokens; longer prompts are billed at 5x (see below).
-    "claude-haiku-5-5": { input: 0.1, output: 0.5, cacheWrite5m: 0.125, cacheWrite1h: 0.2, cacheRead: 0.01 },
+    "claude-haiku-5-5": {
+      input: 0.1,
+      output: 0.5,
+      cacheWrite5m: 0.125,
+      cacheWrite1h: 0.2,
+      cacheRead: 0.01,
+    },
     // Models a refused request can be re-run on by the server-side fallback.
     "claude-opus-5": { input: 5, output: 25, cacheWrite5m: 6.25, cacheWrite1h: 10, cacheRead: 0.5 },
-    "claude-opus-4-8": { input: 5, output: 25, cacheWrite5m: 6.25, cacheWrite1h: 10, cacheRead: 0.5 },
+    "claude-opus-4-8": {
+      input: 5,
+      output: 25,
+      cacheWrite5m: 6.25,
+      cacheWrite1h: 10,
+      cacheRead: 0.5,
+    },
   } as Record<string, Rates>,
   /** Batch API: half price on input and output. */
   batchMultiplier: 0.5,

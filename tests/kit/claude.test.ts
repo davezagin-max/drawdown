@@ -90,20 +90,30 @@ describe("callClaude response handling", () => {
   it("parses and validates structured output", async () => {
     const schema = z.object({ title: z.string(), n: z.number() });
     const good = fakeClient([message([thinking, { type: "text", text: '{"title":"t","n":2}' }])]);
-    const ok = await callClaude({ client: good.client, schema, messages: [{ role: "user", content: "q" }] });
+    const ok = await callClaude({
+      client: good.client,
+      schema,
+      messages: [{ role: "user", content: "q" }],
+    });
     expect(ok.parsed).toEqual({ title: "t", n: 2 });
     const format = (good.requests[0].output_config as { format: { type: string } }).format;
     expect(format.type).toBe("json_schema");
 
     const bad = fakeClient([message([{ type: "text", text: '{"title":"t"}' }])]);
-    const invalid = await callClaude({ client: bad.client, schema, messages: [{ role: "user", content: "q" }] });
+    const invalid = await callClaude({
+      client: bad.client,
+      schema,
+      messages: [{ role: "user", content: "q" }],
+    });
     expect(invalid.ok).toBe(false);
     expect(invalid.parsed).toBeNull();
   });
 
   it("returns a refusal instead of throwing, without appending the refused turn", async () => {
     const { client } = fakeClient([
-      message([], "refusal", { stop_details: { type: "refusal", category: "cyber", explanation: "no" } }),
+      message([], "refusal", {
+        stop_details: { type: "refusal", category: "cyber", explanation: "no" },
+      }),
     ]);
     const input = [{ role: "user" as const, content: "q" }];
     const result = await callClaude({ client, messages: input });
@@ -121,7 +131,9 @@ describe("callClaude response handling", () => {
 });
 
 describe("callClaude tool loop", () => {
-  const tools = [strictTool("add", "Add two numbers.", { a: { type: "number" }, b: { type: "number" } })];
+  const tools = [
+    strictTool("add", "Add two numbers.", { a: { type: "number" }, b: { type: "number" } }),
+  ];
   const toolTurn = [
     thinking,
     { type: "tool_use", id: "t1", name: "add", input: { a: 1, b: 2 } },
@@ -162,7 +174,12 @@ describe("callClaude tool loop", () => {
       message(toolTurn, "tool_use"),
       message([{ type: "text", text: "done" }]),
     ]);
-    const result = await callClaude({ client, tools, handlers: { add: () => 0 }, messages: [{ role: "user", content: "x" }] });
+    const result = await callClaude({
+      client,
+      tools,
+      handlers: { add: () => 0 },
+      messages: [{ role: "user", content: "x" }],
+    });
     expect(result.usage.input_tokens).toBe(200);
     expect(result.usage.output_tokens).toBe(100);
     expect(result.costUsd).toBeCloseTo((200 * 4 + 100 * 20) / 1_000_000, 12);
@@ -184,7 +201,9 @@ describe("callClaude tool loop", () => {
       messages: [{ role: "user", content: "x" }],
     });
     const sent = (requests[1].messages as { content: unknown }[])[2].content;
-    expect(sent).toEqual([{ type: "tool_result", tool_use_id: "t1", content: "boom", is_error: true }]);
+    expect(sent).toEqual([
+      { type: "tool_result", tool_use_id: "t1", content: "boom", is_error: true },
+    ]);
     expect(result.toolCalls[0].isError).toBe(true);
     expect(result.ok).toBe(true);
   });
@@ -196,11 +215,14 @@ describe("callClaude tool loop", () => {
     const result = await callClaude({ client, tools, messages: [{ role: "user", content: "x" }] });
     expect(requests).toHaveLength(1);
     expect(result.ok).toBe(true);
-    expect(result.toolCalls).toEqual([{ id: "t1", name: "add", input: { a: 1, b: 2 }, isError: false, round: 1 }]);
+    expect(result.toolCalls).toEqual([
+      { id: "t1", name: "add", input: { a: 1, b: 2 }, isError: false, round: 1 },
+    ]);
   });
 
   it("stops at the round limit instead of looping forever", async () => {
-    const loop = () => message([{ type: "tool_use", id: "t", name: "add", input: { a: 1, b: 1 } }], "tool_use");
+    const loop = () =>
+      message([{ type: "tool_use", id: "t", name: "add", input: { a: 1, b: 1 } }], "tool_use");
     const { client, requests } = fakeClient([loop(), loop(), loop(), loop()]);
     const result = await callClaude({
       client,

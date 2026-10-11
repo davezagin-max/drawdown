@@ -10,7 +10,11 @@ export function CostMeter({ meta, className = "" }: { meta: ApiMeta | null; clas
   const cached = usage.cache_read_input_tokens;
   const input = usage.input_tokens + usage.cache_creation_input_tokens + cached;
   const label =
-    meta.mode === "live" ? "This run" : meta.placeholder ? "Sample (not a real run)" : "Recorded run";
+    meta.mode === "live"
+      ? "This run"
+      : meta.placeholder
+        ? "Sample (not a real run)"
+        : "Recorded run";
 
   return (
     <p
