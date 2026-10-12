@@ -2,78 +2,51 @@
   "port": 3310,
   "shots": [
     {
-      "name": "first-screen",
-      "path": "/",
-      "theme": "dark",
-      "viewport": "desktop",
-      "actions": [
-        {
-          "wait": 600
-        }
-      ]
-    },
-    {
       "name": "hero",
       "path": "/",
       "theme": "dark",
-      "viewport": {
-        "width": 1280,
-        "height": 1040
-      },
+      "viewport": { "width": 1280, "height": 1040 },
       "actions": [
-        {
-          "click": "[data-cta='play']"
-        },
-        {
-          "waitFor": "[data-session='done']"
-        },
-        {
-          "click": "[data-status='matched'] >> nth=5"
-        },
-        {
-          "wait": 400
-        }
+        { "click": "[data-cta='play']" },
+        { "waitFor": "[data-session='done']" },
+        { "click": "[data-status='matched'] >> nth=5" },
+        { "wait": 400 }
       ]
     },
     {
       "name": "charts",
       "path": "/",
       "theme": "dark",
-      "viewport": {
-        "width": 1280,
-        "height": 1180
-      },
+      "viewport": { "width": 1280, "height": 1180 },
       "actions": [
-        {
-          "waitFor": "[data-frontier][data-ready='true']"
-        },
-        {
-          "scroll": 640
-        },
-        {
-          "wait": 700
-        }
+        { "waitFor": "[data-frontier][data-ready='true']" },
+        { "scroll": 640 },
+        { "wait": 700 }
+      ]
+    },
+    {
+      "name": "checker",
+      "path": "/",
+      "theme": "dark",
+      "viewport": { "width": 1280, "height": 1040 },
+      "actions": [
+        { "click": "[data-preset='market-drop']" },
+        { "waitFor": "[data-session='done']" },
+        { "click": "[data-action='self-test']" },
+        { "click": "[data-status='unmatched']" },
+        { "wait": 400 }
       ]
     },
     {
       "name": "light",
       "path": "/",
       "theme": "light",
-      "viewport": "desktop",
-      "fullPage": true,
+      "viewport": { "width": 1280, "height": 1040 },
       "actions": [
-        {
-          "click": "[data-cta='play']"
-        },
-        {
-          "waitFor": "[data-session='done']"
-        },
-        {
-          "waitFor": "[data-frontier][data-ready='true']"
-        },
-        {
-          "wait": 400
-        }
+        { "click": "[data-preset='trim-tech']" },
+        { "waitFor": "[data-session='done']" },
+        { "click": "[data-status='matched'] >> nth=4" },
+        { "wait": 400 }
       ]
     },
     {
@@ -81,29 +54,34 @@
       "path": "/",
       "theme": "dark",
       "viewport": "mobile",
-      "actions": [
-        {
-          "wait": 500
-        }
-      ]
+      "actions": [{ "wait": 500 }]
     },
     {
-      "name": "mobile-full",
+      "name": "mobile-analyst",
       "path": "/",
       "theme": "dark",
       "viewport": "mobile",
-      "fullPage": true,
       "actions": [
-        {
-          "click": "[data-cta='play']"
-        },
-        {
-          "waitFor": "[data-session='done']"
-        },
-        {
-          "wait": 600
-        }
+        { "click": "[data-cta='play']" },
+        { "waitFor": "[data-session='done']" },
+        { "wait": 800 }
       ]
     }
-  ]
+  ],
+  "gif": {
+    "path": "/",
+    "theme": "dark",
+    "actions": [
+      { "wait": 900 },
+      { "click": "[data-cta='play']" },
+      { "waitFor": "[data-session='done']" },
+      { "wait": 1200 },
+      { "click": "[data-status='matched'] >> nth=5" },
+      { "wait": 1500 },
+      { "click": "[data-action='self-test']" },
+      { "wait": 2200 },
+      { "scroll": 1150 },
+      { "wait": 3200 }
+    ]
+  }
 }

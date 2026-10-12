@@ -93,9 +93,13 @@ def _market_drop(o: Outputs) -> str:
         f"rest, because technology is {pct(combined['sector_weight'], 0)} of the portfolio. "
         f"{worst['ticker']} is the largest single loss at {usd(worst['change_usd'])}.{hedge}\n\n"
         f"For scale, the worst fall in this simulated history was {pct(drawdown['value'])}, "
-        f"so the scenario is {'deeper' if deeper else 'shallower'} than anything the "
-        "history contains. The estimate is linear: it scales each holding by its beta and "
-        "ignores how correlations shift in a real sell-off."
+        + (
+            "so the scenario is deeper than anything the history contains. "
+            if deeper
+            else "so the history already contains a deeper fall than this scenario. "
+        )
+        + "The estimate is linear: it scales each holding by its beta and ignores how "
+        "correlations shift in a real sell-off."
     )
 
 

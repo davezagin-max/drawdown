@@ -13,7 +13,7 @@
   "costUsd": 0,
   "data": {
    "question": "What happens if the market falls 20% and technology drops a further 10%?",
-   "answer": "In this scenario the portfolio falls 25.3%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative, at -0.21.\n\nFor scale, the worst fall in this simulated history was 30.0%, so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
+   "answer": "In this scenario the portfolio falls 25.3%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative, at -0.21.\n\nFor scale, the worst fall in this simulated history was 30.0%, so the history already contains a deeper fall than this scenario. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
    "calls": [
     {
      "id": "toolu_sample_01",
@@ -324,7 +324,7 @@
       "number": 10
      },
      {
-      "text": ", so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off."
+      "text": ", so the history already contains a deeper fall than this scenario. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off."
      }
     ],
     "numbers": [
@@ -467,7 +467,7 @@
     "ignored": []
    },
    "selfTest": {
-    "answer": "In this scenario the portfolio falls 35.7%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative, at -0.21.\n\nFor scale, the worst fall in this simulated history was 30.0%, so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
+    "answer": "In this scenario the portfolio falls 35.7%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative, at -0.21.\n\nFor scale, the worst fall in this simulated history was 30.0%, so the history already contains a deeper fall than this scenario. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
     "provenance": {
      "segments": [
       {
@@ -548,7 +548,7 @@
        "number": 10
       },
       {
-       "text": ", so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off."
+       "text": ", so the history already contains a deeper fall than this scenario. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off."
       }
      ],
      "numbers": [
