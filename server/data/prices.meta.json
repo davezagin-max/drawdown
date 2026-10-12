@@ -1,0 +1,10 @@
+{
+  "source": "synthetic",
+  "note": "Simulated by a seeded factor model. Ticker symbols and sectors are labels only; these are not real market prices.",
+  "generator": "server/app/synthetic.py",
+  "seed": 20261011,
+  "start": "2021-12-10",
+  "end": "2026-10-09",
+  "rows": 1261,
+  "tickers": 52
+}
