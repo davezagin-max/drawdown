@@ -89,7 +89,7 @@ def test_fixture_is_a_valid_output_of_the_real_pipeline(demo_id: str) -> None:
     assert close(streamed, data["calls"])
     assert events[0].type == "round"
     # Calls in the same round were requested together: that is the parallel tool use.
-    assert max(c.round for c in session.calls) <= session.rounds
+    assert max((c.round for c in session.calls), default=0) <= session.rounds
 
     # 4. Labelling is honest: a placeholder has no usage, a recording has a timestamp.
     if fixture["placeholder"]:

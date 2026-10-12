@@ -54,11 +54,14 @@ describe("POST /api/analyst in demo mode", () => {
     expect(trail.rounds.map((r) => r.round)).toEqual(
       Array.from({ length: session.rounds }, (_, i) => i + 1),
     );
-    expect(trail.rounds.some((r) => r.calls.length > 1)).toBe(true); // parallel tool calls
-    expect(trail.rounds.some((r) => r.notes.length > 0)).toBe(true); // progress notes
+    if (fixture.placeholder) {
+      // The samples are written to show these; a recorded run's shape is up to the model.
+      expect(trail.rounds.some((r) => r.calls.length > 1)).toBe(true); // parallel tool calls
+      expect(trail.rounds.some((r) => r.notes.length > 0)).toBe(true); // progress notes
+      expect(session.provenance.numbers.length).toBeGreaterThan(5);
+    }
 
     // The answer arrives with a verdict on every figure.
-    expect(session.provenance.numbers.length).toBeGreaterThan(5);
     expect(
       session.provenance.matched + session.provenance.fromQuestion + session.provenance.unmatched,
     ).toBe(session.provenance.numbers.length);
