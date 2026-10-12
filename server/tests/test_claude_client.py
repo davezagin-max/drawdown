@@ -5,6 +5,8 @@ from pydantic import BaseModel
 
 from app.claude_client import (
     MissingKeyError,
+    PipelineError,
+    api_error,
     call_claude,
     client_for_key,
     strict_tool,
@@ -194,3 +196,45 @@ def test_key_validation() -> None:
     with pytest.raises(MissingKeyError):
         client_for_key("not-a-key")
     assert client_for_key("sk-ant-test-0123456789abcdef") is not None
+
+
+def test_should_stop_ends_the_loop_before_the_next_request() -> None:
+    def loop():
+        return message([block("tool_use", id="t", name="add", input={"a": 1, "b": 1})], "tool_use")
+
+    client = FakeClient([loop(), loop(), loop()])
+    asked: list[int] = []
+
+    def should_stop() -> bool:
+        asked.append(len(client.requests))
+        return len(client.requests) >= 2  # the visitor leaves during the second round
+
+    result = call_claude(
+        client,  # type: ignore[arg-type]
+        messages=USER,
+        tools=TOOLS,
+        handlers={"add": lambda _: 2},
+        should_stop=should_stop,
+    )
+    assert asked == [0, 1, 2]  # asked before every request
+    assert len(client.requests) == 2  # the third request was never sent
+    assert result.stop_reason == "cancelled"
+    assert not result.ok
+    assert len(result.tool_calls) == 2
+    assert result.usage.input_tokens == 200  # what was spent is still reported
+
+
+def test_should_stop_can_prevent_the_first_request() -> None:
+    client = FakeClient([message([block("text", text="hi")])])
+    result = call_claude(client, messages=USER, should_stop=lambda: True)  # type: ignore[arg-type]
+    assert client.requests == []
+    assert result.stop_reason == "cancelled"
+    assert result.cost_usd == 0
+
+
+def test_pipeline_errors_keep_their_message_and_status() -> None:
+    assert api_error(PipelineError("The answer was cut off.", 422)) == (
+        422,
+        "The answer was cut off.",
+    )
+    assert api_error(RuntimeError("internal detail")) == (500, "Something went wrong.")

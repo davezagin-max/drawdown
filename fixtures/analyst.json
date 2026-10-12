@@ -1,0 +1,3184 @@
+{
+ "market-drop": {
+  "label": "market-drop",
+  "placeholder": true,
+  "recordedAt": null,
+  "model": "claude-opus-5-5",
+  "usage": {
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0
+  },
+  "costUsd": 0,
+  "data": {
+   "question": "What happens if the market falls 20% and technology drops a further 10%?",
+   "answer": "In this scenario the portfolio falls 25.3%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative (-0.21).\n\nFor scale, the worst fall in this simulated history was 30.0%, so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
+   "calls": [
+    {
+     "id": "toolu_sample_01",
+     "name": "run_stress_test",
+     "input": {
+      "market_shock_pct": -20,
+      "sector": "Technology",
+      "sector_shock_pct": -10
+     },
+     "output": {
+      "market_shock_pct": -20.0,
+      "sector": "Technology",
+      "sector_shock_pct": -10.0,
+      "sector_weight": 0.38,
+      "portfolio_change": -0.253252,
+      "portfolio_change_usd": -63313.05,
+      "portfolio_value_after_usd": 186686.95,
+      "positions": [
+       {
+        "ticker": "NVDA",
+        "beta": 1.71527,
+        "change": -0.443054,
+        "change_usd": -15506.89
+       },
+       {
+        "ticker": "AAPL",
+        "beta": 1.205062,
+        "change": -0.341012,
+        "change_usd": -10230.37
+       },
+       {
+        "ticker": "MSFT",
+        "beta": 1.116658,
+        "change": -0.323332,
+        "change_usd": -9699.95
+       },
+       {
+        "ticker": "TSLA",
+        "beta": 1.99268,
+        "change": -0.398536,
+        "change_usd": -5978.04
+       },
+       {
+        "ticker": "AMZN",
+        "beta": 1.186639,
+        "change": -0.237328,
+        "change_usd": -5339.88
+       },
+       {
+        "ticker": "GOOGL",
+        "beta": 1.209381,
+        "change": -0.241876,
+        "change_usd": -4837.52
+       },
+       {
+        "ticker": "JPM",
+        "beta": 1.079943,
+        "change": -0.215989,
+        "change_usd": -4319.77
+       },
+       {
+        "ticker": "COST",
+        "beta": 0.775179,
+        "change": -0.155036,
+        "change_usd": -2325.54
+       },
+       {
+        "ticker": "UNH",
+        "beta": 0.723471,
+        "change": -0.144694,
+        "change_usd": -2170.41
+       },
+       {
+        "ticker": "XOM",
+        "beta": 0.865396,
+        "change": -0.173079,
+        "change_usd": -2163.49
+       },
+       {
+        "ticker": "JNJ",
+        "beta": 0.526621,
+        "change": -0.105324,
+        "change_usd": -1579.86
+       },
+       {
+        "ticker": "TLT",
+        "beta": -0.209669,
+        "change": 0.041934,
+        "change_usd": 838.68
+       }
+      ],
+      "method": "each holding moves by its beta times the market shock, plus the sector shock"
+     },
+     "isError": false,
+     "round": 1
+    },
+    {
+     "id": "toolu_sample_02",
+     "name": "run_stress_test",
+     "input": {
+      "market_shock_pct": -20,
+      "sector": "NONE",
+      "sector_shock_pct": 0
+     },
+     "output": {
+      "market_shock_pct": -20.0,
+      "sector": "NONE",
+      "sector_shock_pct": 0.0,
+      "sector_weight": 0.0,
+      "portfolio_change": -0.215252,
+      "portfolio_change_usd": -53813.05,
+      "portfolio_value_after_usd": 196186.95,
+      "positions": [
+       {
+        "ticker": "NVDA",
+        "beta": 1.71527,
+        "change": -0.343054,
+        "change_usd": -12006.89
+       },
+       {
+        "ticker": "AAPL",
+        "beta": 1.205062,
+        "change": -0.241012,
+        "change_usd": -7230.37
+       },
+       {
+        "ticker": "MSFT",
+        "beta": 1.116658,
+        "change": -0.223332,
+        "change_usd": -6699.95
+       },
+       {
+        "ticker": "TSLA",
+        "beta": 1.99268,
+        "change": -0.398536,
+        "change_usd": -5978.04
+       },
+       {
+        "ticker": "AMZN",
+        "beta": 1.186639,
+        "change": -0.237328,
+        "change_usd": -5339.88
+       },
+       {
+        "ticker": "GOOGL",
+        "beta": 1.209381,
+        "change": -0.241876,
+        "change_usd": -4837.52
+       },
+       {
+        "ticker": "JPM",
+        "beta": 1.079943,
+        "change": -0.215989,
+        "change_usd": -4319.77
+       },
+       {
+        "ticker": "COST",
+        "beta": 0.775179,
+        "change": -0.155036,
+        "change_usd": -2325.54
+       },
+       {
+        "ticker": "UNH",
+        "beta": 0.723471,
+        "change": -0.144694,
+        "change_usd": -2170.41
+       },
+       {
+        "ticker": "XOM",
+        "beta": 0.865396,
+        "change": -0.173079,
+        "change_usd": -2163.49
+       },
+       {
+        "ticker": "JNJ",
+        "beta": 0.526621,
+        "change": -0.105324,
+        "change_usd": -1579.86
+       },
+       {
+        "ticker": "TLT",
+        "beta": -0.209669,
+        "change": 0.041934,
+        "change_usd": 838.68
+       }
+      ],
+      "method": "each holding moves by its beta times the market shock, plus the sector shock"
+     },
+     "isError": false,
+     "round": 1
+    },
+    {
+     "id": "toolu_sample_03",
+     "name": "get_metric",
+     "input": {
+      "metric": "beta",
+      "subject": "PORTFOLIO"
+     },
+     "output": {
+      "metric": "beta",
+      "subject": "PORTFOLIO",
+      "value": 1.076261,
+      "unit": "vs SPY"
+     },
+     "isError": false,
+     "round": 1
+    },
+    {
+     "id": "toolu_sample_04",
+     "name": "get_metric",
+     "input": {
+      "metric": "max_drawdown",
+      "subject": "PORTFOLIO"
+     },
+     "output": {
+      "metric": "max_drawdown",
+      "subject": "PORTFOLIO",
+      "value": -0.299714,
+      "unit": "fraction, peak to trough",
+      "peak_date": "2022-03-30",
+      "trough_date": "2022-08-04",
+      "recovery_date": "2023-03-17",
+      "trading_days_peak_to_trough": 91
+     },
+     "isError": false,
+     "round": 2
+    }
+   ],
+   "rounds": 3,
+   "usedTools": true,
+   "provenance": {
+    "segments": [
+     {
+      "text": "In this scenario the portfolio falls "
+     },
+     {
+      "text": "25.3%",
+      "number": 0
+     },
+     {
+      "text": ", a loss of about "
+     },
+     {
+      "text": "$63,313",
+      "number": 1
+     },
+     {
+      "text": " that leaves "
+     },
+     {
+      "text": "$186,687",
+      "number": 2
+     },
+     {
+      "text": ". A "
+     },
+     {
+      "text": "20%",
+      "number": 3
+     },
+     {
+      "text": " market fall on its own accounts for "
+     },
+     {
+      "text": "21.5%",
+      "number": 4
+     },
+     {
+      "text": ": the portfolio's beta is "
+     },
+     {
+      "text": "1.08",
+      "number": 5
+     },
+     {
+      "text": ", so it moves slightly more than the market.\n\nThe extra "
+     },
+     {
+      "text": "10%",
+      "number": 6
+     },
+     {
+      "text": " hit to technology adds the rest, because technology is "
+     },
+     {
+      "text": "38%",
+      "number": 7
+     },
+     {
+      "text": " of the portfolio. NVDA is the largest single loss at "
+     },
+     {
+      "text": "$15,507",
+      "number": 8
+     },
+     {
+      "text": ". TLT is the only holding that gains, because its beta is negative ("
+     },
+     {
+      "text": "-0.21",
+      "number": 9
+     },
+     {
+      "text": ").\n\nFor scale, the worst fall in this simulated history was "
+     },
+     {
+      "text": "30.0%",
+      "number": 10
+     },
+     {
+      "text": ", so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off."
+     }
+    ],
+    "numbers": [
+     {
+      "text": "25.3%",
+      "value": 25.3,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "run_stress_test",
+      "path": "portfolio_change",
+      "sourceValue": -0.253252,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "$63,313",
+      "value": 63313.0,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "run_stress_test",
+      "path": "portfolio_change_usd",
+      "sourceValue": -63313.05,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "$186,687",
+      "value": 186687.0,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "run_stress_test",
+      "path": "portfolio_value_after_usd",
+      "sourceValue": 186686.95,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "20%",
+      "value": 20.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "run_stress_test",
+      "path": "market_shock_pct",
+      "sourceValue": -20.0,
+      "approximate": false,
+      "alternatives": 1
+     },
+     {
+      "text": "21.5%",
+      "value": 21.5,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_02",
+      "tool": "run_stress_test",
+      "path": "portfolio_change",
+      "sourceValue": -0.215252,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "1.08",
+      "value": 1.08,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_03",
+      "tool": "get_metric",
+      "path": "value",
+      "sourceValue": 1.076261,
+      "approximate": false,
+      "alternatives": 2
+     },
+     {
+      "text": "10%",
+      "value": 10.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "run_stress_test",
+      "path": "sector_shock_pct",
+      "sourceValue": -10.0,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "38%",
+      "value": 38.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "run_stress_test",
+      "path": "sector_weight",
+      "sourceValue": 0.38,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "$15,507",
+      "value": 15507.0,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "run_stress_test",
+      "path": "positions[0].change_usd",
+      "sourceValue": -15506.89,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "-0.21",
+      "value": -0.21,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "run_stress_test",
+      "path": "positions[11].beta",
+      "sourceValue": -0.209669,
+      "approximate": false,
+      "alternatives": 1
+     },
+     {
+      "text": "30.0%",
+      "value": 30.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_04",
+      "tool": "get_metric",
+      "path": "value",
+      "sourceValue": -0.299714,
+      "approximate": false,
+      "alternatives": 0
+     }
+    ],
+    "matched": 11,
+    "fromQuestion": 0,
+    "unmatched": 0,
+    "ignored": []
+   },
+   "selfTest": {
+    "answer": "In this scenario the portfolio falls 35.7%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative (-0.21).\n\nFor scale, the worst fall in this simulated history was 30.0%, so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
+    "provenance": {
+     "segments": [
+      {
+       "text": "In this scenario the portfolio falls "
+      },
+      {
+       "text": "35.7%",
+       "number": 0
+      },
+      {
+       "text": ", a loss of about "
+      },
+      {
+       "text": "$63,313",
+       "number": 1
+      },
+      {
+       "text": " that leaves "
+      },
+      {
+       "text": "$186,687",
+       "number": 2
+      },
+      {
+       "text": ". A "
+      },
+      {
+       "text": "20%",
+       "number": 3
+      },
+      {
+       "text": " market fall on its own accounts for "
+      },
+      {
+       "text": "21.5%",
+       "number": 4
+      },
+      {
+       "text": ": the portfolio's beta is "
+      },
+      {
+       "text": "1.08",
+       "number": 5
+      },
+      {
+       "text": ", so it moves slightly more than the market.\n\nThe extra "
+      },
+      {
+       "text": "10%",
+       "number": 6
+      },
+      {
+       "text": " hit to technology adds the rest, because technology is "
+      },
+      {
+       "text": "38%",
+       "number": 7
+      },
+      {
+       "text": " of the portfolio. NVDA is the largest single loss at "
+      },
+      {
+       "text": "$15,507",
+       "number": 8
+      },
+      {
+       "text": ". TLT is the only holding that gains, because its beta is negative ("
+      },
+      {
+       "text": "-0.21",
+       "number": 9
+      },
+      {
+       "text": ").\n\nFor scale, the worst fall in this simulated history was "
+      },
+      {
+       "text": "30.0%",
+       "number": 10
+      },
+      {
+       "text": ", so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off."
+      }
+     ],
+     "numbers": [
+      {
+       "text": "35.7%",
+       "value": 35.7,
+       "unit": "percent",
+       "status": "unmatched",
+       "callId": null,
+       "tool": null,
+       "path": null,
+       "sourceValue": null,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "$63,313",
+       "value": 63313.0,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "run_stress_test",
+       "path": "portfolio_change_usd",
+       "sourceValue": -63313.05,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "$186,687",
+       "value": 186687.0,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "run_stress_test",
+       "path": "portfolio_value_after_usd",
+       "sourceValue": 186686.95,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "20%",
+       "value": 20.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "run_stress_test",
+       "path": "market_shock_pct",
+       "sourceValue": -20.0,
+       "approximate": false,
+       "alternatives": 1
+      },
+      {
+       "text": "21.5%",
+       "value": 21.5,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_02",
+       "tool": "run_stress_test",
+       "path": "portfolio_change",
+       "sourceValue": -0.215252,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "1.08",
+       "value": 1.08,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_03",
+       "tool": "get_metric",
+       "path": "value",
+       "sourceValue": 1.076261,
+       "approximate": false,
+       "alternatives": 2
+      },
+      {
+       "text": "10%",
+       "value": 10.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "run_stress_test",
+       "path": "sector_shock_pct",
+       "sourceValue": -10.0,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "38%",
+       "value": 38.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "run_stress_test",
+       "path": "sector_weight",
+       "sourceValue": 0.38,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "$15,507",
+       "value": 15507.0,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "run_stress_test",
+       "path": "positions[0].change_usd",
+       "sourceValue": -15506.89,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "-0.21",
+       "value": -0.21,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "run_stress_test",
+       "path": "positions[11].beta",
+       "sourceValue": -0.209669,
+       "approximate": false,
+       "alternatives": 1
+      },
+      {
+       "text": "30.0%",
+       "value": 30.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_04",
+       "tool": "get_metric",
+       "path": "value",
+       "sourceValue": -0.299714,
+       "approximate": false,
+       "alternatives": 0
+      }
+     ],
+     "matched": 10,
+     "fromQuestion": 0,
+     "unmatched": 1,
+     "ignored": []
+    },
+    "original": "25.3%",
+    "altered": "35.7%"
+   }
+  },
+  "events": [
+   {
+    "at": 0,
+    "event": {
+     "type": "round",
+     "round": 1
+    }
+   },
+   {
+    "at": 2600,
+    "event": {
+     "type": "note",
+     "text": "Running the combined shock next to a market-only version, so the technology effect can be separated out."
+    }
+   },
+   {
+    "at": 6000,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_01",
+      "name": "run_stress_test",
+      "input": {
+       "market_shock_pct": -20,
+       "sector": "Technology",
+       "sector_shock_pct": -10
+      },
+      "output": {
+       "market_shock_pct": -20.0,
+       "sector": "Technology",
+       "sector_shock_pct": -10.0,
+       "sector_weight": 0.38,
+       "portfolio_change": -0.253252,
+       "portfolio_change_usd": -63313.05,
+       "portfolio_value_after_usd": 186686.95,
+       "positions": [
+        {
+         "ticker": "NVDA",
+         "beta": 1.71527,
+         "change": -0.443054,
+         "change_usd": -15506.89
+        },
+        {
+         "ticker": "AAPL",
+         "beta": 1.205062,
+         "change": -0.341012,
+         "change_usd": -10230.37
+        },
+        {
+         "ticker": "MSFT",
+         "beta": 1.116658,
+         "change": -0.323332,
+         "change_usd": -9699.95
+        },
+        {
+         "ticker": "TSLA",
+         "beta": 1.99268,
+         "change": -0.398536,
+         "change_usd": -5978.04
+        },
+        {
+         "ticker": "AMZN",
+         "beta": 1.186639,
+         "change": -0.237328,
+         "change_usd": -5339.88
+        },
+        {
+         "ticker": "GOOGL",
+         "beta": 1.209381,
+         "change": -0.241876,
+         "change_usd": -4837.52
+        },
+        {
+         "ticker": "JPM",
+         "beta": 1.079943,
+         "change": -0.215989,
+         "change_usd": -4319.77
+        },
+        {
+         "ticker": "COST",
+         "beta": 0.775179,
+         "change": -0.155036,
+         "change_usd": -2325.54
+        },
+        {
+         "ticker": "UNH",
+         "beta": 0.723471,
+         "change": -0.144694,
+         "change_usd": -2170.41
+        },
+        {
+         "ticker": "XOM",
+         "beta": 0.865396,
+         "change": -0.173079,
+         "change_usd": -2163.49
+        },
+        {
+         "ticker": "JNJ",
+         "beta": 0.526621,
+         "change": -0.105324,
+         "change_usd": -1579.86
+        },
+        {
+         "ticker": "TLT",
+         "beta": -0.209669,
+         "change": 0.041934,
+         "change_usd": 838.68
+        }
+       ],
+       "method": "each holding moves by its beta times the market shock, plus the sector shock"
+      },
+      "isError": false,
+      "round": 1
+     }
+    }
+   },
+   {
+    "at": 6160,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_02",
+      "name": "run_stress_test",
+      "input": {
+       "market_shock_pct": -20,
+       "sector": "NONE",
+       "sector_shock_pct": 0
+      },
+      "output": {
+       "market_shock_pct": -20.0,
+       "sector": "NONE",
+       "sector_shock_pct": 0.0,
+       "sector_weight": 0.0,
+       "portfolio_change": -0.215252,
+       "portfolio_change_usd": -53813.05,
+       "portfolio_value_after_usd": 196186.95,
+       "positions": [
+        {
+         "ticker": "NVDA",
+         "beta": 1.71527,
+         "change": -0.343054,
+         "change_usd": -12006.89
+        },
+        {
+         "ticker": "AAPL",
+         "beta": 1.205062,
+         "change": -0.241012,
+         "change_usd": -7230.37
+        },
+        {
+         "ticker": "MSFT",
+         "beta": 1.116658,
+         "change": -0.223332,
+         "change_usd": -6699.95
+        },
+        {
+         "ticker": "TSLA",
+         "beta": 1.99268,
+         "change": -0.398536,
+         "change_usd": -5978.04
+        },
+        {
+         "ticker": "AMZN",
+         "beta": 1.186639,
+         "change": -0.237328,
+         "change_usd": -5339.88
+        },
+        {
+         "ticker": "GOOGL",
+         "beta": 1.209381,
+         "change": -0.241876,
+         "change_usd": -4837.52
+        },
+        {
+         "ticker": "JPM",
+         "beta": 1.079943,
+         "change": -0.215989,
+         "change_usd": -4319.77
+        },
+        {
+         "ticker": "COST",
+         "beta": 0.775179,
+         "change": -0.155036,
+         "change_usd": -2325.54
+        },
+        {
+         "ticker": "UNH",
+         "beta": 0.723471,
+         "change": -0.144694,
+         "change_usd": -2170.41
+        },
+        {
+         "ticker": "XOM",
+         "beta": 0.865396,
+         "change": -0.173079,
+         "change_usd": -2163.49
+        },
+        {
+         "ticker": "JNJ",
+         "beta": 0.526621,
+         "change": -0.105324,
+         "change_usd": -1579.86
+        },
+        {
+         "ticker": "TLT",
+         "beta": -0.209669,
+         "change": 0.041934,
+         "change_usd": 838.68
+        }
+       ],
+       "method": "each holding moves by its beta times the market shock, plus the sector shock"
+      },
+      "isError": false,
+      "round": 1
+     }
+    }
+   },
+   {
+    "at": 6320,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_03",
+      "name": "get_metric",
+      "input": {
+       "metric": "beta",
+       "subject": "PORTFOLIO"
+      },
+      "output": {
+       "metric": "beta",
+       "subject": "PORTFOLIO",
+       "value": 1.076261,
+       "unit": "vs SPY"
+      },
+      "isError": false,
+      "round": 1
+     }
+    }
+   },
+   {
+    "at": 6480,
+    "event": {
+     "type": "round",
+     "round": 2
+    }
+   },
+   {
+    "at": 9080,
+    "event": {
+     "type": "note",
+     "text": "Putting the scenario next to the worst fall this history actually produced."
+    }
+   },
+   {
+    "at": 12480,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_04",
+      "name": "get_metric",
+      "input": {
+       "metric": "max_drawdown",
+       "subject": "PORTFOLIO"
+      },
+      "output": {
+       "metric": "max_drawdown",
+       "subject": "PORTFOLIO",
+       "value": -0.299714,
+       "unit": "fraction, peak to trough",
+       "peak_date": "2022-03-30",
+       "trough_date": "2022-08-04",
+       "recovery_date": "2023-03-17",
+       "trading_days_peak_to_trough": 91
+      },
+      "isError": false,
+      "round": 2
+     }
+    }
+   },
+   {
+    "at": 12640,
+    "event": {
+     "type": "round",
+     "round": 3
+    }
+   },
+   {
+    "at": 15240,
+    "event": {
+     "type": "note",
+     "text": "Writing up the scenario and its limits."
+    }
+   }
+  ]
+ },
+ "risk-sources": {
+  "label": "risk-sources",
+  "placeholder": true,
+  "recordedAt": null,
+  "model": "claude-opus-5-5",
+  "usage": {
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0
+  },
+  "costUsd": 0,
+  "data": {
+   "question": "Where is the risk in this portfolio coming from?",
+   "answer": "The portfolio's volatility is 18.7% a year, against 15.7% for the SPY benchmark, and its beta of 1.08 means it tends to move a little more than the market does.\n\nMost of that risk sits in one place. Technology is 38% of the money, and NVDA alone is 14% of the weight but 25.7% of the portfolio's variance. At the other end, TLT has a slightly negative risk share (-1.1%): it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was 30.0%, from 30 March 2022 to 4 August 2022, over 91 trading days. On an ordinary bad day, the 95% one-day value at risk is 1.7%, or about $4,259.",
+   "calls": [
+    {
+     "id": "toolu_sample_01",
+     "name": "get_metric",
+     "input": {
+      "metric": "volatility",
+      "subject": "PORTFOLIO"
+     },
+     "output": {
+      "metric": "volatility",
+      "subject": "PORTFOLIO",
+      "value": 0.186872,
+      "unit": "fraction per year",
+      "trading_days_per_year": 252
+     },
+     "isError": false,
+     "round": 1
+    },
+    {
+     "id": "toolu_sample_02",
+     "name": "get_metric",
+     "input": {
+      "metric": "beta",
+      "subject": "PORTFOLIO"
+     },
+     "output": {
+      "metric": "beta",
+      "subject": "PORTFOLIO",
+      "value": 1.076261,
+      "unit": "vs SPY"
+     },
+     "isError": false,
+     "round": 1
+    },
+    {
+     "id": "toolu_sample_03",
+     "name": "get_metric",
+     "input": {
+      "metric": "sector_exposure",
+      "subject": "PORTFOLIO"
+     },
+     "output": {
+      "metric": "sector_exposure",
+      "subject": "PORTFOLIO",
+      "sectors": [
+       {
+        "sector": "Technology",
+        "weight": 0.38
+       },
+       {
+        "sector": "Consumer Discretionary",
+        "weight": 0.15
+       },
+       {
+        "sector": "Health Care",
+        "weight": 0.12
+       },
+       {
+        "sector": "Communication",
+        "weight": 0.08
+       },
+       {
+        "sector": "Financials",
+        "weight": 0.08
+       },
+       {
+        "sector": "Fixed Income",
+        "weight": 0.08
+       },
+       {
+        "sector": "Consumer Staples",
+        "weight": 0.06
+       },
+       {
+        "sector": "Energy",
+        "weight": 0.05
+       }
+      ]
+     },
+     "isError": false,
+     "round": 1
+    },
+    {
+     "id": "toolu_sample_04",
+     "name": "get_metric",
+     "input": {
+      "metric": "risk_contribution",
+      "subject": "PORTFOLIO"
+     },
+     "output": {
+      "metric": "risk_contribution",
+      "subject": "PORTFOLIO",
+      "unit": "share of portfolio variance",
+      "positions": [
+       {
+        "ticker": "NVDA",
+        "weight": 0.14,
+        "risk_share": 0.257005
+       },
+       {
+        "ticker": "AAPL",
+        "weight": 0.12,
+        "risk_share": 0.129728
+       },
+       {
+        "ticker": "MSFT",
+        "weight": 0.12,
+        "risk_share": 0.121043
+       },
+       {
+        "ticker": "TSLA",
+        "weight": 0.06,
+        "risk_share": 0.111699
+       },
+       {
+        "ticker": "AMZN",
+        "weight": 0.09,
+        "risk_share": 0.09514
+       },
+       {
+        "ticker": "GOOGL",
+        "weight": 0.08,
+        "risk_share": 0.080983
+       },
+       {
+        "ticker": "JPM",
+        "weight": 0.08,
+        "risk_share": 0.074632
+       },
+       {
+        "ticker": "COST",
+        "weight": 0.06,
+        "risk_share": 0.038563
+       },
+       {
+        "ticker": "UNH",
+        "weight": 0.06,
+        "risk_share": 0.038558
+       },
+       {
+        "ticker": "XOM",
+        "weight": 0.05,
+        "risk_share": 0.036081
+       },
+       {
+        "ticker": "JNJ",
+        "weight": 0.06,
+        "risk_share": 0.027117
+       },
+       {
+        "ticker": "TLT",
+        "weight": 0.08,
+        "risk_share": -0.010548
+       }
+      ]
+     },
+     "isError": false,
+     "round": 1
+    },
+    {
+     "id": "toolu_sample_05",
+     "name": "get_metric",
+     "input": {
+      "metric": "max_drawdown",
+      "subject": "PORTFOLIO"
+     },
+     "output": {
+      "metric": "max_drawdown",
+      "subject": "PORTFOLIO",
+      "value": -0.299714,
+      "unit": "fraction, peak to trough",
+      "peak_date": "2022-03-30",
+      "trough_date": "2022-08-04",
+      "recovery_date": "2023-03-17",
+      "trading_days_peak_to_trough": 91
+     },
+     "isError": false,
+     "round": 2
+    },
+    {
+     "id": "toolu_sample_06",
+     "name": "get_metric",
+     "input": {
+      "metric": "var_95",
+      "subject": "PORTFOLIO"
+     },
+     "output": {
+      "metric": "var_95",
+      "subject": "PORTFOLIO",
+      "value": 0.017038,
+      "unit": "loss as a positive fraction",
+      "confidence": 0.95,
+      "horizon_days": 1,
+      "loss_usd": 4259.43
+     },
+     "isError": false,
+     "round": 2
+    },
+    {
+     "id": "toolu_sample_07",
+     "name": "get_metric",
+     "input": {
+      "metric": "volatility",
+      "subject": "SPY"
+     },
+     "output": {
+      "metric": "volatility",
+      "subject": "SPY",
+      "value": 0.157164,
+      "unit": "fraction per year",
+      "trading_days_per_year": 252
+     },
+     "isError": false,
+     "round": 2
+    }
+   ],
+   "rounds": 3,
+   "usedTools": true,
+   "provenance": {
+    "segments": [
+     {
+      "text": "The portfolio's volatility is "
+     },
+     {
+      "text": "18.7%",
+      "number": 0
+     },
+     {
+      "text": " a year, against "
+     },
+     {
+      "text": "15.7%",
+      "number": 1
+     },
+     {
+      "text": " for the SPY benchmark, and its beta of "
+     },
+     {
+      "text": "1.08",
+      "number": 2
+     },
+     {
+      "text": " means it tends to move a little more than the market does.\n\nMost of that risk sits in one place. Technology is "
+     },
+     {
+      "text": "38%",
+      "number": 3
+     },
+     {
+      "text": " of the money, and NVDA alone is "
+     },
+     {
+      "text": "14%",
+      "number": 4
+     },
+     {
+      "text": " of the weight but "
+     },
+     {
+      "text": "25.7%",
+      "number": 5
+     },
+     {
+      "text": " of the portfolio's variance. At the other end, TLT has a slightly negative risk share ("
+     },
+     {
+      "text": "-1.1%",
+      "number": 6
+     },
+     {
+      "text": "): it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was "
+     },
+     {
+      "text": "30.0%",
+      "number": 7
+     },
+     {
+      "text": ", from 30 March 2022 to 4 August 2022, over "
+     },
+     {
+      "text": "91",
+      "number": 8
+     },
+     {
+      "text": " trading days. On an ordinary bad day, the "
+     },
+     {
+      "text": "95%",
+      "number": 9
+     },
+     {
+      "text": " one-day value at risk is "
+     },
+     {
+      "text": "1.7%",
+      "number": 10
+     },
+     {
+      "text": ", or about "
+     },
+     {
+      "text": "$4,259",
+      "number": 11
+     },
+     {
+      "text": "."
+     }
+    ],
+    "numbers": [
+     {
+      "text": "18.7%",
+      "value": 18.7,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "get_metric",
+      "path": "value",
+      "sourceValue": 0.186872,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "15.7%",
+      "value": 15.7,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_07",
+      "tool": "get_metric",
+      "path": "value",
+      "sourceValue": 0.157164,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "1.08",
+      "value": 1.08,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_02",
+      "tool": "get_metric",
+      "path": "value",
+      "sourceValue": 1.076261,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "38%",
+      "value": 38.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_03",
+      "tool": "get_metric",
+      "path": "sectors[0].weight",
+      "sourceValue": 0.38,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "14%",
+      "value": 14.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_04",
+      "tool": "get_metric",
+      "path": "positions[0].weight",
+      "sourceValue": 0.14,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "25.7%",
+      "value": 25.7,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_04",
+      "tool": "get_metric",
+      "path": "positions[0].risk_share",
+      "sourceValue": 0.257005,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "-1.1%",
+      "value": -1.1,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_04",
+      "tool": "get_metric",
+      "path": "positions[11].risk_share",
+      "sourceValue": -0.010548,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "30.0%",
+      "value": 30.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_05",
+      "tool": "get_metric",
+      "path": "value",
+      "sourceValue": -0.299714,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "91",
+      "value": 91.0,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_05",
+      "tool": "get_metric",
+      "path": "trading_days_peak_to_trough",
+      "sourceValue": 91.0,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "95%",
+      "value": 95.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_06",
+      "tool": "get_metric",
+      "path": "confidence",
+      "sourceValue": 0.95,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "1.7%",
+      "value": 1.7,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_06",
+      "tool": "get_metric",
+      "path": "value",
+      "sourceValue": 0.017038,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "$4,259",
+      "value": 4259.0,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_06",
+      "tool": "get_metric",
+      "path": "loss_usd",
+      "sourceValue": 4259.43,
+      "approximate": false,
+      "alternatives": 0
+     }
+    ],
+    "matched": 12,
+    "fromQuestion": 0,
+    "unmatched": 0,
+    "ignored": [
+     {
+      "text": "30 March 2022",
+      "reason": "date"
+     },
+     {
+      "text": "4 August 2022",
+      "reason": "date"
+     }
+    ]
+   },
+   "selfTest": {
+    "answer": "The portfolio's volatility is 26.6% a year, against 15.7% for the SPY benchmark, and its beta of 1.08 means it tends to move a little more than the market does.\n\nMost of that risk sits in one place. Technology is 38% of the money, and NVDA alone is 14% of the weight but 25.7% of the portfolio's variance. At the other end, TLT has a slightly negative risk share (-1.1%): it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was 30.0%, from 30 March 2022 to 4 August 2022, over 91 trading days. On an ordinary bad day, the 95% one-day value at risk is 1.7%, or about $4,259.",
+    "provenance": {
+     "segments": [
+      {
+       "text": "The portfolio's volatility is "
+      },
+      {
+       "text": "26.6%",
+       "number": 0
+      },
+      {
+       "text": " a year, against "
+      },
+      {
+       "text": "15.7%",
+       "number": 1
+      },
+      {
+       "text": " for the SPY benchmark, and its beta of "
+      },
+      {
+       "text": "1.08",
+       "number": 2
+      },
+      {
+       "text": " means it tends to move a little more than the market does.\n\nMost of that risk sits in one place. Technology is "
+      },
+      {
+       "text": "38%",
+       "number": 3
+      },
+      {
+       "text": " of the money, and NVDA alone is "
+      },
+      {
+       "text": "14%",
+       "number": 4
+      },
+      {
+       "text": " of the weight but "
+      },
+      {
+       "text": "25.7%",
+       "number": 5
+      },
+      {
+       "text": " of the portfolio's variance. At the other end, TLT has a slightly negative risk share ("
+      },
+      {
+       "text": "-1.1%",
+       "number": 6
+      },
+      {
+       "text": "): it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was "
+      },
+      {
+       "text": "30.0%",
+       "number": 7
+      },
+      {
+       "text": ", from 30 March 2022 to 4 August 2022, over "
+      },
+      {
+       "text": "91",
+       "number": 8
+      },
+      {
+       "text": " trading days. On an ordinary bad day, the "
+      },
+      {
+       "text": "95%",
+       "number": 9
+      },
+      {
+       "text": " one-day value at risk is "
+      },
+      {
+       "text": "1.7%",
+       "number": 10
+      },
+      {
+       "text": ", or about "
+      },
+      {
+       "text": "$4,259",
+       "number": 11
+      },
+      {
+       "text": "."
+      }
+     ],
+     "numbers": [
+      {
+       "text": "26.6%",
+       "value": 26.6,
+       "unit": "percent",
+       "status": "unmatched",
+       "callId": null,
+       "tool": null,
+       "path": null,
+       "sourceValue": null,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "15.7%",
+       "value": 15.7,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_07",
+       "tool": "get_metric",
+       "path": "value",
+       "sourceValue": 0.157164,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "1.08",
+       "value": 1.08,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_02",
+       "tool": "get_metric",
+       "path": "value",
+       "sourceValue": 1.076261,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "38%",
+       "value": 38.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_03",
+       "tool": "get_metric",
+       "path": "sectors[0].weight",
+       "sourceValue": 0.38,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "14%",
+       "value": 14.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_04",
+       "tool": "get_metric",
+       "path": "positions[0].weight",
+       "sourceValue": 0.14,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "25.7%",
+       "value": 25.7,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_04",
+       "tool": "get_metric",
+       "path": "positions[0].risk_share",
+       "sourceValue": 0.257005,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "-1.1%",
+       "value": -1.1,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_04",
+       "tool": "get_metric",
+       "path": "positions[11].risk_share",
+       "sourceValue": -0.010548,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "30.0%",
+       "value": 30.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_05",
+       "tool": "get_metric",
+       "path": "value",
+       "sourceValue": -0.299714,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "91",
+       "value": 91.0,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_05",
+       "tool": "get_metric",
+       "path": "trading_days_peak_to_trough",
+       "sourceValue": 91.0,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "95%",
+       "value": 95.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_06",
+       "tool": "get_metric",
+       "path": "confidence",
+       "sourceValue": 0.95,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "1.7%",
+       "value": 1.7,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_06",
+       "tool": "get_metric",
+       "path": "value",
+       "sourceValue": 0.017038,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "$4,259",
+       "value": 4259.0,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_06",
+       "tool": "get_metric",
+       "path": "loss_usd",
+       "sourceValue": 4259.43,
+       "approximate": false,
+       "alternatives": 0
+      }
+     ],
+     "matched": 11,
+     "fromQuestion": 0,
+     "unmatched": 1,
+     "ignored": [
+      {
+       "text": "30 March 2022",
+       "reason": "date"
+      },
+      {
+       "text": "4 August 2022",
+       "reason": "date"
+      }
+     ]
+    },
+    "original": "18.7%",
+    "altered": "26.6%"
+   }
+  },
+  "events": [
+   {
+    "at": 0,
+    "event": {
+     "type": "round",
+     "round": 1
+    }
+   },
+   {
+    "at": 2600,
+    "event": {
+     "type": "note",
+     "text": "Starting with the headline risk numbers and how the money is spread."
+    }
+   },
+   {
+    "at": 6000,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_01",
+      "name": "get_metric",
+      "input": {
+       "metric": "volatility",
+       "subject": "PORTFOLIO"
+      },
+      "output": {
+       "metric": "volatility",
+       "subject": "PORTFOLIO",
+       "value": 0.186872,
+       "unit": "fraction per year",
+       "trading_days_per_year": 252
+      },
+      "isError": false,
+      "round": 1
+     }
+    }
+   },
+   {
+    "at": 6160,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_02",
+      "name": "get_metric",
+      "input": {
+       "metric": "beta",
+       "subject": "PORTFOLIO"
+      },
+      "output": {
+       "metric": "beta",
+       "subject": "PORTFOLIO",
+       "value": 1.076261,
+       "unit": "vs SPY"
+      },
+      "isError": false,
+      "round": 1
+     }
+    }
+   },
+   {
+    "at": 6320,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_03",
+      "name": "get_metric",
+      "input": {
+       "metric": "sector_exposure",
+       "subject": "PORTFOLIO"
+      },
+      "output": {
+       "metric": "sector_exposure",
+       "subject": "PORTFOLIO",
+       "sectors": [
+        {
+         "sector": "Technology",
+         "weight": 0.38
+        },
+        {
+         "sector": "Consumer Discretionary",
+         "weight": 0.15
+        },
+        {
+         "sector": "Health Care",
+         "weight": 0.12
+        },
+        {
+         "sector": "Communication",
+         "weight": 0.08
+        },
+        {
+         "sector": "Financials",
+         "weight": 0.08
+        },
+        {
+         "sector": "Fixed Income",
+         "weight": 0.08
+        },
+        {
+         "sector": "Consumer Staples",
+         "weight": 0.06
+        },
+        {
+         "sector": "Energy",
+         "weight": 0.05
+        }
+       ]
+      },
+      "isError": false,
+      "round": 1
+     }
+    }
+   },
+   {
+    "at": 6480,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_04",
+      "name": "get_metric",
+      "input": {
+       "metric": "risk_contribution",
+       "subject": "PORTFOLIO"
+      },
+      "output": {
+       "metric": "risk_contribution",
+       "subject": "PORTFOLIO",
+       "unit": "share of portfolio variance",
+       "positions": [
+        {
+         "ticker": "NVDA",
+         "weight": 0.14,
+         "risk_share": 0.257005
+        },
+        {
+         "ticker": "AAPL",
+         "weight": 0.12,
+         "risk_share": 0.129728
+        },
+        {
+         "ticker": "MSFT",
+         "weight": 0.12,
+         "risk_share": 0.121043
+        },
+        {
+         "ticker": "TSLA",
+         "weight": 0.06,
+         "risk_share": 0.111699
+        },
+        {
+         "ticker": "AMZN",
+         "weight": 0.09,
+         "risk_share": 0.09514
+        },
+        {
+         "ticker": "GOOGL",
+         "weight": 0.08,
+         "risk_share": 0.080983
+        },
+        {
+         "ticker": "JPM",
+         "weight": 0.08,
+         "risk_share": 0.074632
+        },
+        {
+         "ticker": "COST",
+         "weight": 0.06,
+         "risk_share": 0.038563
+        },
+        {
+         "ticker": "UNH",
+         "weight": 0.06,
+         "risk_share": 0.038558
+        },
+        {
+         "ticker": "XOM",
+         "weight": 0.05,
+         "risk_share": 0.036081
+        },
+        {
+         "ticker": "JNJ",
+         "weight": 0.06,
+         "risk_share": 0.027117
+        },
+        {
+         "ticker": "TLT",
+         "weight": 0.08,
+         "risk_share": -0.010548
+        }
+       ]
+      },
+      "isError": false,
+      "round": 1
+     }
+    }
+   },
+   {
+    "at": 6640,
+    "event": {
+     "type": "round",
+     "round": 2
+    }
+   },
+   {
+    "at": 9240,
+    "event": {
+     "type": "note",
+     "text": "One holding carries far more risk than its weight. Checking the worst fall, an ordinary bad day, and the benchmark for comparison."
+    }
+   },
+   {
+    "at": 12640,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_05",
+      "name": "get_metric",
+      "input": {
+       "metric": "max_drawdown",
+       "subject": "PORTFOLIO"
+      },
+      "output": {
+       "metric": "max_drawdown",
+       "subject": "PORTFOLIO",
+       "value": -0.299714,
+       "unit": "fraction, peak to trough",
+       "peak_date": "2022-03-30",
+       "trough_date": "2022-08-04",
+       "recovery_date": "2023-03-17",
+       "trading_days_peak_to_trough": 91
+      },
+      "isError": false,
+      "round": 2
+     }
+    }
+   },
+   {
+    "at": 12800,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_06",
+      "name": "get_metric",
+      "input": {
+       "metric": "var_95",
+       "subject": "PORTFOLIO"
+      },
+      "output": {
+       "metric": "var_95",
+       "subject": "PORTFOLIO",
+       "value": 0.017038,
+       "unit": "loss as a positive fraction",
+       "confidence": 0.95,
+       "horizon_days": 1,
+       "loss_usd": 4259.43
+      },
+      "isError": false,
+      "round": 2
+     }
+    }
+   },
+   {
+    "at": 12960,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_07",
+      "name": "get_metric",
+      "input": {
+       "metric": "volatility",
+       "subject": "SPY"
+      },
+      "output": {
+       "metric": "volatility",
+       "subject": "SPY",
+       "value": 0.157164,
+       "unit": "fraction per year",
+       "trading_days_per_year": 252
+      },
+      "isError": false,
+      "round": 2
+     }
+    }
+   },
+   {
+    "at": 13120,
+    "event": {
+     "type": "round",
+     "round": 3
+    }
+   },
+   {
+    "at": 15720,
+    "event": {
+     "type": "note",
+     "text": "Writing up where the risk concentrates."
+    }
+   }
+  ]
+ },
+ "trim-tech": {
+  "label": "trim-tech",
+  "placeholder": true,
+  "recordedAt": null,
+  "model": "claude-opus-5-5",
+  "usage": {
+   "input_tokens": 0,
+   "output_tokens": 0,
+   "cache_creation_input_tokens": 0,
+   "cache_read_input_tokens": 0
+  },
+  "costUsd": 0,
+  "data": {
+   "question": "What would cutting technology to 20% of the portfolio do to its risk?",
+   "answer": "Technology is 38% of the portfolio today. Moving it to 20% and scaling every other holding up in proportion would mean trading 18% of the portfolio, about $45,000.\n\nOn this history, volatility would go from 18.7% to 17.1%, beta from 1.08 to 0.99, and the worst fall from 30.0% to 25.0%. The 95% one-day value at risk would move from 1.70% to 1.54%.\n\nFor context, a simulation of the current mix over 252 trading days (5,000 paths) ends with a loss in 19% of them. The middle outcome is a gain of 17.4% and the 5th-percentile outcome is a loss of 13.2%. None of this says which mix is better. It describes how the risk numbers would have differed.",
+   "calls": [
+    {
+     "id": "toolu_sample_01",
+     "name": "rebalance_to_target",
+     "input": {
+      "scope": "sector",
+      "name": "Technology",
+      "target_weight_pct": 20
+     },
+     "output": {
+      "scope": "sector",
+      "name": "Technology",
+      "current_weight_pct": 38.0,
+      "target_weight_pct": 20.0,
+      "var_confidence": 0.95,
+      "before": {
+       "volatility": 0.186872,
+       "max_drawdown": -0.299714,
+       "beta": 1.076261,
+       "var_95": 0.017038,
+       "cvar_95": 0.025943
+      },
+      "after": {
+       "volatility": 0.171298,
+       "max_drawdown": -0.250375,
+       "beta": 0.9924,
+       "var_95": 0.015389,
+       "cvar_95": 0.024115
+      },
+      "change": {
+       "volatility": -0.015574,
+       "max_drawdown": 0.049339,
+       "beta": -0.083861,
+       "var_95": -0.001649,
+       "cvar_95": -0.001828
+      },
+      "turnover": 0.18,
+      "turnover_usd": 45000.0,
+      "weights_after": [
+       {
+        "ticker": "AMZN",
+        "weight": 0.116129
+       },
+       {
+        "ticker": "GOOGL",
+        "weight": 0.103226
+       },
+       {
+        "ticker": "JPM",
+        "weight": 0.103226
+       },
+       {
+        "ticker": "TLT",
+        "weight": 0.103226
+       },
+       {
+        "ticker": "COST",
+        "weight": 0.077419
+       },
+       {
+        "ticker": "JNJ",
+        "weight": 0.077419
+       },
+       {
+        "ticker": "TSLA",
+        "weight": 0.077419
+       },
+       {
+        "ticker": "UNH",
+        "weight": 0.077419
+       },
+       {
+        "ticker": "NVDA",
+        "weight": 0.073684
+       },
+       {
+        "ticker": "XOM",
+        "weight": 0.064516
+       },
+       {
+        "ticker": "AAPL",
+        "weight": 0.063158
+       },
+       {
+        "ticker": "MSFT",
+        "weight": 0.063158
+       }
+      ],
+      "note": "A what-if on historical data. It describes risk, not what to buy or sell."
+     },
+     "isError": false,
+     "round": 1
+    },
+    {
+     "id": "toolu_sample_02",
+     "name": "get_metric",
+     "input": {
+      "metric": "sector_exposure",
+      "subject": "PORTFOLIO"
+     },
+     "output": {
+      "metric": "sector_exposure",
+      "subject": "PORTFOLIO",
+      "sectors": [
+       {
+        "sector": "Technology",
+        "weight": 0.38
+       },
+       {
+        "sector": "Consumer Discretionary",
+        "weight": 0.15
+       },
+       {
+        "sector": "Health Care",
+        "weight": 0.12
+       },
+       {
+        "sector": "Communication",
+        "weight": 0.08
+       },
+       {
+        "sector": "Financials",
+        "weight": 0.08
+       },
+       {
+        "sector": "Fixed Income",
+        "weight": 0.08
+       },
+       {
+        "sector": "Consumer Staples",
+        "weight": 0.06
+       },
+       {
+        "sector": "Energy",
+        "weight": 0.05
+       }
+      ]
+     },
+     "isError": false,
+     "round": 1
+    },
+    {
+     "id": "toolu_sample_03",
+     "name": "monte_carlo",
+     "input": {
+      "horizon_days": 252,
+      "simulations": 5000
+     },
+     "output": {
+      "horizon_days": 252,
+      "simulations": 5000,
+      "method": "bootstrap: each path resamples historical daily returns with replacement",
+      "start_value_usd": 250000.0,
+      "return_percentiles": {
+       "p5": -0.131656,
+       "p25": 0.039996,
+       "p50": 0.173685,
+       "p75": 0.328957,
+       "p95": 0.595059
+      },
+      "value_usd_percentiles": {
+       "p5": 217086.0,
+       "p25": 259999.0,
+       "p50": 293421.25,
+       "p75": 332239.25,
+       "p95": 398764.75
+      },
+      "mean_return": 0.195796,
+      "probability_of_loss": 0.1882
+     },
+     "isError": false,
+     "round": 2
+    }
+   ],
+   "rounds": 3,
+   "usedTools": true,
+   "provenance": {
+    "segments": [
+     {
+      "text": "Technology is "
+     },
+     {
+      "text": "38%",
+      "number": 0
+     },
+     {
+      "text": " of the portfolio today. Moving it to "
+     },
+     {
+      "text": "20%",
+      "number": 1
+     },
+     {
+      "text": " and scaling every other holding up in proportion would mean trading "
+     },
+     {
+      "text": "18%",
+      "number": 2
+     },
+     {
+      "text": " of the portfolio, about "
+     },
+     {
+      "text": "$45,000",
+      "number": 3
+     },
+     {
+      "text": ".\n\nOn this history, volatility would go from "
+     },
+     {
+      "text": "18.7%",
+      "number": 4
+     },
+     {
+      "text": " to "
+     },
+     {
+      "text": "17.1%",
+      "number": 5
+     },
+     {
+      "text": ", beta from "
+     },
+     {
+      "text": "1.08",
+      "number": 6
+     },
+     {
+      "text": " to "
+     },
+     {
+      "text": "0.99",
+      "number": 7
+     },
+     {
+      "text": ", and the worst fall from "
+     },
+     {
+      "text": "30.0%",
+      "number": 8
+     },
+     {
+      "text": " to "
+     },
+     {
+      "text": "25.0%",
+      "number": 9
+     },
+     {
+      "text": ". The "
+     },
+     {
+      "text": "95%",
+      "number": 10
+     },
+     {
+      "text": " one-day value at risk would move from "
+     },
+     {
+      "text": "1.70%",
+      "number": 11
+     },
+     {
+      "text": " to "
+     },
+     {
+      "text": "1.54%",
+      "number": 12
+     },
+     {
+      "text": ".\n\nFor context, a simulation of the current mix over "
+     },
+     {
+      "text": "252",
+      "number": 13
+     },
+     {
+      "text": " trading days ("
+     },
+     {
+      "text": "5,000",
+      "number": 14
+     },
+     {
+      "text": " paths) ends with a loss in "
+     },
+     {
+      "text": "19%",
+      "number": 15
+     },
+     {
+      "text": " of them. The middle outcome is a gain of "
+     },
+     {
+      "text": "17.4%",
+      "number": 16
+     },
+     {
+      "text": " and the 5th-percentile outcome is a loss of "
+     },
+     {
+      "text": "13.2%",
+      "number": 17
+     },
+     {
+      "text": ". None of this says which mix is better. It describes how the risk numbers would have differed."
+     }
+    ],
+    "numbers": [
+     {
+      "text": "38%",
+      "value": 38.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_02",
+      "tool": "get_metric",
+      "path": "sectors[0].weight",
+      "sourceValue": 0.38,
+      "approximate": false,
+      "alternatives": 1
+     },
+     {
+      "text": "20%",
+      "value": 20.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "target_weight_pct",
+      "sourceValue": 20.0,
+      "approximate": false,
+      "alternatives": 1
+     },
+     {
+      "text": "18%",
+      "value": 18.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "turnover",
+      "sourceValue": 0.18,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "$45,000",
+      "value": 45000.0,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "turnover_usd",
+      "sourceValue": 45000.0,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "18.7%",
+      "value": 18.7,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "before.volatility",
+      "sourceValue": 0.186872,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "17.1%",
+      "value": 17.1,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "after.volatility",
+      "sourceValue": 0.171298,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "1.08",
+      "value": 1.08,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "before.beta",
+      "sourceValue": 1.076261,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "0.99",
+      "value": 0.99,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "after.beta",
+      "sourceValue": 0.9924,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "30.0%",
+      "value": 30.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "before.max_drawdown",
+      "sourceValue": -0.299714,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "25.0%",
+      "value": 25.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "after.max_drawdown",
+      "sourceValue": -0.250375,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "95%",
+      "value": 95.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "var_confidence",
+      "sourceValue": 0.95,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "1.70%",
+      "value": 1.7,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "before.var_95",
+      "sourceValue": 0.017038,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "1.54%",
+      "value": 1.54,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_01",
+      "tool": "rebalance_to_target",
+      "path": "after.var_95",
+      "sourceValue": 0.015389,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "252",
+      "value": 252.0,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_03",
+      "tool": "monte_carlo",
+      "path": "horizon_days",
+      "sourceValue": 252.0,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "5,000",
+      "value": 5000.0,
+      "unit": "plain",
+      "status": "matched",
+      "callId": "toolu_sample_03",
+      "tool": "monte_carlo",
+      "path": "simulations",
+      "sourceValue": 5000.0,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "19%",
+      "value": 19.0,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_03",
+      "tool": "monte_carlo",
+      "path": "probability_of_loss",
+      "sourceValue": 0.1882,
+      "approximate": false,
+      "alternatives": 1
+     },
+     {
+      "text": "17.4%",
+      "value": 17.4,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_03",
+      "tool": "monte_carlo",
+      "path": "return_percentiles.p50",
+      "sourceValue": 0.173685,
+      "approximate": false,
+      "alternatives": 0
+     },
+     {
+      "text": "13.2%",
+      "value": 13.2,
+      "unit": "percent",
+      "status": "matched",
+      "callId": "toolu_sample_03",
+      "tool": "monte_carlo",
+      "path": "return_percentiles.p5",
+      "sourceValue": -0.131656,
+      "approximate": false,
+      "alternatives": 0
+     }
+    ],
+    "matched": 18,
+    "fromQuestion": 0,
+    "unmatched": 0,
+    "ignored": [
+     {
+      "text": "5",
+      "reason": "ordinal"
+     }
+    ]
+   },
+   "selfTest": {
+    "answer": "Technology is 53% of the portfolio today. Moving it to 20% and scaling every other holding up in proportion would mean trading 18% of the portfolio, about $45,000.\n\nOn this history, volatility would go from 18.7% to 17.1%, beta from 1.08 to 0.99, and the worst fall from 30.0% to 25.0%. The 95% one-day value at risk would move from 1.70% to 1.54%.\n\nFor context, a simulation of the current mix over 252 trading days (5,000 paths) ends with a loss in 19% of them. The middle outcome is a gain of 17.4% and the 5th-percentile outcome is a loss of 13.2%. None of this says which mix is better. It describes how the risk numbers would have differed.",
+    "provenance": {
+     "segments": [
+      {
+       "text": "Technology is "
+      },
+      {
+       "text": "53%",
+       "number": 0
+      },
+      {
+       "text": " of the portfolio today. Moving it to "
+      },
+      {
+       "text": "20%",
+       "number": 1
+      },
+      {
+       "text": " and scaling every other holding up in proportion would mean trading "
+      },
+      {
+       "text": "18%",
+       "number": 2
+      },
+      {
+       "text": " of the portfolio, about "
+      },
+      {
+       "text": "$45,000",
+       "number": 3
+      },
+      {
+       "text": ".\n\nOn this history, volatility would go from "
+      },
+      {
+       "text": "18.7%",
+       "number": 4
+      },
+      {
+       "text": " to "
+      },
+      {
+       "text": "17.1%",
+       "number": 5
+      },
+      {
+       "text": ", beta from "
+      },
+      {
+       "text": "1.08",
+       "number": 6
+      },
+      {
+       "text": " to "
+      },
+      {
+       "text": "0.99",
+       "number": 7
+      },
+      {
+       "text": ", and the worst fall from "
+      },
+      {
+       "text": "30.0%",
+       "number": 8
+      },
+      {
+       "text": " to "
+      },
+      {
+       "text": "25.0%",
+       "number": 9
+      },
+      {
+       "text": ". The "
+      },
+      {
+       "text": "95%",
+       "number": 10
+      },
+      {
+       "text": " one-day value at risk would move from "
+      },
+      {
+       "text": "1.70%",
+       "number": 11
+      },
+      {
+       "text": " to "
+      },
+      {
+       "text": "1.54%",
+       "number": 12
+      },
+      {
+       "text": ".\n\nFor context, a simulation of the current mix over "
+      },
+      {
+       "text": "252",
+       "number": 13
+      },
+      {
+       "text": " trading days ("
+      },
+      {
+       "text": "5,000",
+       "number": 14
+      },
+      {
+       "text": " paths) ends with a loss in "
+      },
+      {
+       "text": "19%",
+       "number": 15
+      },
+      {
+       "text": " of them. The middle outcome is a gain of "
+      },
+      {
+       "text": "17.4%",
+       "number": 16
+      },
+      {
+       "text": " and the 5th-percentile outcome is a loss of "
+      },
+      {
+       "text": "13.2%",
+       "number": 17
+      },
+      {
+       "text": ". None of this says which mix is better. It describes how the risk numbers would have differed."
+      }
+     ],
+     "numbers": [
+      {
+       "text": "53%",
+       "value": 53.0,
+       "unit": "percent",
+       "status": "unmatched",
+       "callId": null,
+       "tool": null,
+       "path": null,
+       "sourceValue": null,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "20%",
+       "value": 20.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "target_weight_pct",
+       "sourceValue": 20.0,
+       "approximate": false,
+       "alternatives": 1
+      },
+      {
+       "text": "18%",
+       "value": 18.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "turnover",
+       "sourceValue": 0.18,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "$45,000",
+       "value": 45000.0,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "turnover_usd",
+       "sourceValue": 45000.0,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "18.7%",
+       "value": 18.7,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "before.volatility",
+       "sourceValue": 0.186872,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "17.1%",
+       "value": 17.1,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "after.volatility",
+       "sourceValue": 0.171298,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "1.08",
+       "value": 1.08,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "before.beta",
+       "sourceValue": 1.076261,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "0.99",
+       "value": 0.99,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "after.beta",
+       "sourceValue": 0.9924,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "30.0%",
+       "value": 30.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "before.max_drawdown",
+       "sourceValue": -0.299714,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "25.0%",
+       "value": 25.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "after.max_drawdown",
+       "sourceValue": -0.250375,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "95%",
+       "value": 95.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "var_confidence",
+       "sourceValue": 0.95,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "1.70%",
+       "value": 1.7,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "before.var_95",
+       "sourceValue": 0.017038,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "1.54%",
+       "value": 1.54,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_01",
+       "tool": "rebalance_to_target",
+       "path": "after.var_95",
+       "sourceValue": 0.015389,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "252",
+       "value": 252.0,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_03",
+       "tool": "monte_carlo",
+       "path": "horizon_days",
+       "sourceValue": 252.0,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "5,000",
+       "value": 5000.0,
+       "unit": "plain",
+       "status": "matched",
+       "callId": "toolu_sample_03",
+       "tool": "monte_carlo",
+       "path": "simulations",
+       "sourceValue": 5000.0,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "19%",
+       "value": 19.0,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_03",
+       "tool": "monte_carlo",
+       "path": "probability_of_loss",
+       "sourceValue": 0.1882,
+       "approximate": false,
+       "alternatives": 1
+      },
+      {
+       "text": "17.4%",
+       "value": 17.4,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_03",
+       "tool": "monte_carlo",
+       "path": "return_percentiles.p50",
+       "sourceValue": 0.173685,
+       "approximate": false,
+       "alternatives": 0
+      },
+      {
+       "text": "13.2%",
+       "value": 13.2,
+       "unit": "percent",
+       "status": "matched",
+       "callId": "toolu_sample_03",
+       "tool": "monte_carlo",
+       "path": "return_percentiles.p5",
+       "sourceValue": -0.131656,
+       "approximate": false,
+       "alternatives": 0
+      }
+     ],
+     "matched": 17,
+     "fromQuestion": 0,
+     "unmatched": 1,
+     "ignored": [
+      {
+       "text": "5",
+       "reason": "ordinal"
+      }
+     ]
+    },
+    "original": "38%",
+    "altered": "53%"
+   }
+  },
+  "events": [
+   {
+    "at": 0,
+    "event": {
+     "type": "round",
+     "round": 1
+    }
+   },
+   {
+    "at": 2600,
+    "event": {
+     "type": "note",
+     "text": "Rebalancing technology down to the target and reading the risk numbers before and after."
+    }
+   },
+   {
+    "at": 6000,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_01",
+      "name": "rebalance_to_target",
+      "input": {
+       "scope": "sector",
+       "name": "Technology",
+       "target_weight_pct": 20
+      },
+      "output": {
+       "scope": "sector",
+       "name": "Technology",
+       "current_weight_pct": 38.0,
+       "target_weight_pct": 20.0,
+       "var_confidence": 0.95,
+       "before": {
+        "volatility": 0.186872,
+        "max_drawdown": -0.299714,
+        "beta": 1.076261,
+        "var_95": 0.017038,
+        "cvar_95": 0.025943
+       },
+       "after": {
+        "volatility": 0.171298,
+        "max_drawdown": -0.250375,
+        "beta": 0.9924,
+        "var_95": 0.015389,
+        "cvar_95": 0.024115
+       },
+       "change": {
+        "volatility": -0.015574,
+        "max_drawdown": 0.049339,
+        "beta": -0.083861,
+        "var_95": -0.001649,
+        "cvar_95": -0.001828
+       },
+       "turnover": 0.18,
+       "turnover_usd": 45000.0,
+       "weights_after": [
+        {
+         "ticker": "AMZN",
+         "weight": 0.116129
+        },
+        {
+         "ticker": "GOOGL",
+         "weight": 0.103226
+        },
+        {
+         "ticker": "JPM",
+         "weight": 0.103226
+        },
+        {
+         "ticker": "TLT",
+         "weight": 0.103226
+        },
+        {
+         "ticker": "COST",
+         "weight": 0.077419
+        },
+        {
+         "ticker": "JNJ",
+         "weight": 0.077419
+        },
+        {
+         "ticker": "TSLA",
+         "weight": 0.077419
+        },
+        {
+         "ticker": "UNH",
+         "weight": 0.077419
+        },
+        {
+         "ticker": "NVDA",
+         "weight": 0.073684
+        },
+        {
+         "ticker": "XOM",
+         "weight": 0.064516
+        },
+        {
+         "ticker": "AAPL",
+         "weight": 0.063158
+        },
+        {
+         "ticker": "MSFT",
+         "weight": 0.063158
+        }
+       ],
+       "note": "A what-if on historical data. It describes risk, not what to buy or sell."
+      },
+      "isError": false,
+      "round": 1
+     }
+    }
+   },
+   {
+    "at": 6160,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_02",
+      "name": "get_metric",
+      "input": {
+       "metric": "sector_exposure",
+       "subject": "PORTFOLIO"
+      },
+      "output": {
+       "metric": "sector_exposure",
+       "subject": "PORTFOLIO",
+       "sectors": [
+        {
+         "sector": "Technology",
+         "weight": 0.38
+        },
+        {
+         "sector": "Consumer Discretionary",
+         "weight": 0.15
+        },
+        {
+         "sector": "Health Care",
+         "weight": 0.12
+        },
+        {
+         "sector": "Communication",
+         "weight": 0.08
+        },
+        {
+         "sector": "Financials",
+         "weight": 0.08
+        },
+        {
+         "sector": "Fixed Income",
+         "weight": 0.08
+        },
+        {
+         "sector": "Consumer Staples",
+         "weight": 0.06
+        },
+        {
+         "sector": "Energy",
+         "weight": 0.05
+        }
+       ]
+      },
+      "isError": false,
+      "round": 1
+     }
+    }
+   },
+   {
+    "at": 6320,
+    "event": {
+     "type": "round",
+     "round": 2
+    }
+   },
+   {
+    "at": 8920,
+    "event": {
+     "type": "note",
+     "text": "Simulating a year of the current mix for context."
+    }
+   },
+   {
+    "at": 12320,
+    "event": {
+     "type": "tool",
+     "call": {
+      "id": "toolu_sample_03",
+      "name": "monte_carlo",
+      "input": {
+       "horizon_days": 252,
+       "simulations": 5000
+      },
+      "output": {
+       "horizon_days": 252,
+       "simulations": 5000,
+       "method": "bootstrap: each path resamples historical daily returns with replacement",
+       "start_value_usd": 250000.0,
+       "return_percentiles": {
+        "p5": -0.131656,
+        "p25": 0.039996,
+        "p50": 0.173685,
+        "p75": 0.328957,
+        "p95": 0.595059
+       },
+       "value_usd_percentiles": {
+        "p5": 217086.0,
+        "p25": 259999.0,
+        "p50": 293421.25,
+        "p75": 332239.25,
+        "p95": 398764.75
+       },
+       "mean_return": 0.195796,
+       "probability_of_loss": 0.1882
+      },
+      "isError": false,
+      "round": 2
+     }
+    }
+   },
+   {
+    "at": 12480,
+    "event": {
+     "type": "round",
+     "round": 3
+    }
+   },
+   {
+    "at": 15080,
+    "event": {
+     "type": "note",
+     "text": "Writing up the before and after."
+    }
+   }
+  ]
+ }
+}

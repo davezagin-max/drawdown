@@ -6,12 +6,13 @@ Next.js frontend talks to this API with the kit's `callApi` / `streamApi` helper
 
 from __future__ import annotations
 
+import asyncio
+import contextlib
 import json
 import os
-import queue
 import threading
 import time
-from collections.abc import Callable, Iterator
+from collections.abc import AsyncIterator, Callable, Iterator
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -25,6 +26,9 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 from . import demo
 from .claude_client import CallResult, MissingKeyError, api_error, client_for_key
 from .config import Usage
+
+# How often a live stream checks whether the visitor is still connected.
+DISCONNECT_POLL_SECONDS = 0.25
 
 MISS_MESSAGE = (
     "Demo mode only answers the presets. Pick one of them, "
@@ -286,12 +290,16 @@ def respond_stream(
     client: anthropic.Anthropic | None,
     live: Callable[[anthropic.Anthropic, Callable[[Any], bool]], Live],
     *,
+    request: Request | None = None,
     replay_speed: float = 4.0,
 ) -> StreamingResponse | JSONResponse:
     """Server-sent events: `meta`, then `event` frames as work progresses, then `done` or `error`.
 
     `live` gets an `emit` function that returns False once the response is no longer being
     read (the visitor cancelled or disconnected), so long-running work can stop early.
+    Pass `request` so a disconnect is noticed within DISCONNECT_POLL_SECONDS even while
+    the work is quiet. Without it, a disconnect is only noticed when the server cancels
+    the response, which some ASGI servers never do.
     """
     key = demo.request_key(body)
     fixture = None if client else demo.find_fixture(store, key)
@@ -315,20 +323,28 @@ def respond_stream(
             yield frame({"type": "event", "event": item["event"]})
         yield frame({"type": "done", "data": fixture["data"], "meta": _demo_meta(fixture)})
 
-    def run_live(client: anthropic.Anthropic) -> Iterator[str]:
+    async def run_live(client: anthropic.Anthropic) -> AsyncIterator[str]:
         yield frame(
             {"type": "meta", "meta": {"mode": "live", "placeholder": False, "recordedAt": None}}
         )
-        frames: queue.Queue[dict[str, Any] | None] = queue.Queue()
+        loop = asyncio.get_running_loop()
+        frames: asyncio.Queue[dict[str, Any] | None] = asyncio.Queue()
         events: list[dict[str, Any]] = []
         started = time.monotonic()
-        gone = threading.Event()  # set when this generator is closed: nobody is reading
+        gone = threading.Event()  # set once nobody is reading: the worker must stop
+
+        def put(item: dict[str, Any] | None) -> None:
+            # The worker runs in a thread; the queue belongs to the event loop.
+            if gone.is_set():
+                return  # nobody is reading
+            with contextlib.suppress(RuntimeError):  # the event loop has shut down
+                loop.call_soon_threadsafe(frames.put_nowait, item)
 
         def emit(event: Any) -> bool:
             if gone.is_set():
                 return False
             events.append({"at": int((time.monotonic() - started) * 1000), "event": event})
-            frames.put({"type": "event", "event": event})
+            put({"type": "event", "event": event})
             return True
 
         def work() -> None:
@@ -337,7 +353,7 @@ def respond_stream(
                 if gone.is_set():
                     return  # a partial run: nothing to send and nothing worth recording
                 if result.refusal is not None:
-                    frames.put(
+                    put(
                         {
                             "type": "error",
                             "error": {
@@ -349,23 +365,33 @@ def respond_stream(
                     )
                 else:
                     _record(store, key, body, result, events)
-                    frames.put({"type": "done", "data": result.data, "meta": _live_meta(result)})
+                    put({"type": "done", "data": result.data, "meta": _live_meta(result)})
             except Exception as error:
                 status, message = api_error(error)
-                frames.put(
-                    {"type": "error", "error": {"kind": _error_kind(status), "message": message}}
-                )
+                put({"type": "error", "error": {"kind": _error_kind(status), "message": message}})
             finally:
-                frames.put(None)
+                put(None)
 
         threading.Thread(target=work, daemon=True).start()
         try:
-            while (item := frames.get()) is not None:
+            while True:
+                try:
+                    item = await asyncio.wait_for(frames.get(), timeout=DISCONNECT_POLL_SECONDS)
+                except TimeoutError:
+                    if request is not None and await request.is_disconnected():
+                        return
+                    continue
+                if item is None:
+                    return
                 yield frame(item)
         finally:
+            # Reached on a normal finish, on the poll above, and when the server cancels
+            # this generator because the client went away.
             gone.set()
 
-    stream = replay(fixture) if fixture is not None else run_live(client)  # type: ignore[arg-type]
+    stream: Iterator[str] | AsyncIterator[str] = (
+        replay(fixture) if fixture is not None else run_live(client)  # type: ignore[arg-type]
+    )
     return StreamingResponse(
         stream,
         media_type="text/event-stream",

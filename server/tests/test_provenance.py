@@ -303,6 +303,77 @@ def test_the_closest_source_wins_and_ties_go_to_the_earliest_call() -> None:
     assert check_provenance("25.3%", calls)["numbers"][0]["callId"] == "a"
 
 
+def test_the_sentence_decides_between_sources_that_round_to_the_same_figure() -> None:
+    calls = [
+        {
+            "id": "stress",
+            "name": "run_stress_test",
+            "isError": False,
+            "input": {"sector": "Technology"},
+            "output": {
+                "method": "each holding moves by its beta times the market shock",
+                "positions": [
+                    {"ticker": "JPM", "beta": 1.079943, "change_usd": -4319.77},
+                    {"ticker": "NVDA", "beta": 1.71527, "change_usd": -15506.89},
+                ],
+            },
+        },
+        {
+            "id": "beta",
+            "name": "get_metric",
+            "isError": False,
+            "input": {"metric": "beta", "subject": "PORTFOLIO"},
+            "output": {"metric": "beta", "subject": "PORTFOLIO", "value": 1.076261},
+        },
+    ]
+
+    def source(text: str) -> tuple[str, str, int]:
+        number = check_provenance(text, calls)["numbers"][0]
+        return number["callId"], number["path"], number["alternatives"]
+
+    # 1.08 is a faithful rounding of both betas; JPM's is numerically closer.
+    assert source("The portfolio's beta is 1.08.") == ("beta", "value", 1)
+    assert source("JPM has a beta of 1.08.") == ("stress", "positions[0].beta", 1)
+    # With no words to go on, the least nested field wins.
+    assert source("1.08") == ("beta", "value", 1)
+    # Context is the figure's own sentence, not the whole answer.
+    assert source("JPM fell. The portfolio's beta is 1.08.") == ("beta", "value", 1)
+    # A long prose field ("method") lends no words to the numbers beside it.
+    sources = collect_sources(calls)
+    assert "shock" not in next(s for s in sources if s.path == "positions[0].beta").words
+    assert {"jpm", "technology", "beta", "positions"} <= next(
+        s for s in sources if s.path == "positions[0].beta"
+    ).words
+    assert source("NVDA loses $15,507.") == ("stress", "positions[1].change_usd", 0)
+
+
+def test_a_value_reproduced_exactly_beats_one_that_only_rounds_to_the_figure() -> None:
+    calls = [
+        {
+            "id": "mc",
+            "name": "monte_carlo",
+            "isError": False,
+            "input": {},
+            "output": {"mean_return": 0.195796},
+        },
+        {
+            "id": "rebalance",
+            "name": "rebalance_to_target",
+            "isError": False,
+            "input": {"scope": "sector", "name": "Technology"},
+            "output": {"target_weight_pct": 20.0},
+        },
+    ]
+    # "mean" appears in the sentence and in `mean_return`, but 20.0 is exactly 20%.
+    number = check_provenance("Moving it to 20% would mean trading more.", calls)["numbers"][0]
+    assert (number["callId"], number["path"], number["alternatives"]) == (
+        "rebalance",
+        "target_weight_pct",
+        1,
+    )
+    assert check_provenance("a mean return of 19.6%", calls)["numbers"][0]["callId"] == "mc"
+
+
 def test_markdown_is_stripped_before_checking() -> None:
     assert clean_answer("## Summary\n**Volatility** is `18.7%`\n* one\n") == (
         "Summary\nVolatility is 18.7%\n- one"

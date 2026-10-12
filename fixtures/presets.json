@@ -1,4 +1,23 @@
 [
-  { "route": "/api/example", "body": { "demoId": "powder-day", "topic": "a powder day in the Wasatch" } },
-  { "route": "/api/example", "body": { "demoId": "house-set", "topic": "the first drop in a house set" } }
+ {
+  "route": "/api/analyst",
+  "body": {
+   "demoId": "risk-sources",
+   "question": "Where is the risk in this portfolio coming from?"
+  }
+ },
+ {
+  "route": "/api/analyst",
+  "body": {
+   "demoId": "market-drop",
+   "question": "What happens if the market falls 20% and technology drops a further 10%?"
+  }
+ },
+ {
+  "route": "/api/analyst",
+  "body": {
+   "demoId": "trim-tech",
+   "question": "What would cutting technology to 20% of the portfolio do to its risk?"
+  }
+ }
 ]

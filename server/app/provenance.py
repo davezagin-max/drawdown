@@ -18,6 +18,15 @@ What counts as a match
   (63,313.05); such a match is marked approximate.
 - Zero only matches an exact zero.
 
+When several tool outputs round to the same figure
+- "a beta of 1.08" may be the portfolio's beta (1.0763) or one holding's (1.0799). A
+  number alone cannot say which. The checker prefers, in order: a source the figure
+  reproduces exactly ("20%" for a target of 20.0) over one it merely rounds; the source
+  whose call and field share the most words with the sentence the figure sits in
+  ("portfolio", "beta"); the least deeply nested field; the closest value; the earliest
+  call. It also reports how many other outputs would have matched, so the UI never
+  implies certainty.
+
 What is not treated as a figure
 - Dates and years ("2022-08-04", "March 30", "in 2022"), ordinals ("2nd"), list
   markers ("1."), index names ("S&P 500"), and numbers inside identifiers ("Q3", "p95").
@@ -99,6 +108,42 @@ def _scale(unit: str, field: str) -> float:
     return 1.0
 
 
+_WORD = re.compile(r"[A-Za-z]{2,}")
+_STOPWORDS = frozenset(
+    [
+        "a",
+        "an",
+        "and",
+        "as",
+        "at",
+        "by",
+        "for",
+        "from",
+        "in",
+        "is",
+        "it",
+        "its",
+        "of",
+        "on",
+        "or",
+        "per",
+        "so",
+        "than",
+        "that",
+        "the",
+        "to",
+        "vs",
+        "was",
+        "with",
+    ]
+)
+_MAX_LABEL_CHARS = 32  # longer strings are prose (a method note), not a label
+
+
+def _words(text: str) -> set[str]:
+    return {w.lower() for w in _WORD.findall(text)} - _STOPWORDS
+
+
 @dataclass(frozen=True)
 class Source:
     """One number in one tool output."""
@@ -107,6 +152,13 @@ class Source:
     tool: str
     path: str  # where in the output, for example "after.volatility" or "positions[0].beta"
     value: float
+    # Words that describe this number: its field path, the short labels next to it
+    # (a ticker, a sector), and the call's text inputs (the metric and subject asked for).
+    words: frozenset[str] = frozenset()
+
+    @property
+    def depth(self) -> int:
+        return self.path.count(".") + self.path.count("[")
 
     @property
     def field(self) -> str:
@@ -141,22 +193,32 @@ def collect_sources(calls: list[dict[str, Any]]) -> list[Source]:
     """Every finite number in the outputs of the calls that succeeded."""
     sources: list[Source] = []
 
-    def walk(node: Any, path: str, call: dict[str, Any]) -> None:
+    def labels(node: dict[str, Any]) -> set[str]:
+        found: set[str] = set()
+        for value in node.values():
+            if isinstance(value, str) and len(value) <= _MAX_LABEL_CHARS:
+                found |= _words(value.replace("_", " "))
+        return found
+
+    def walk(node: Any, path: str, call: dict[str, Any], context: set[str]) -> None:
         if isinstance(node, bool) or node is None:
             return
         if isinstance(node, int | float):
             if math.isfinite(node):
-                sources.append(Source(call["id"], call["name"], path, float(node)))
+                words = frozenset(context | _words(path.replace("_", " ")))
+                sources.append(Source(call["id"], call["name"], path, float(node), words))
         elif isinstance(node, dict):
+            inner = context | labels(node)
             for key, value in node.items():
-                walk(value, f"{path}.{key}" if path else str(key), call)
+                walk(value, f"{path}.{key}" if path else str(key), call, inner)
         elif isinstance(node, list):
             for index, value in enumerate(node):
-                walk(value, f"{path}[{index}]", call)
+                walk(value, f"{path}[{index}]", call, context)
 
     for call in calls:
         if not call.get("isError"):
-            walk(call.get("output"), "", call)
+            asked = call.get("input")
+            walk(call.get("output"), "", call, labels(asked) if isinstance(asked, dict) else set())
     return sources
 
 
@@ -254,9 +316,34 @@ def extract(text: str) -> tuple[list[Mention], list[dict[str, str]]]:
     return mentions, ignored
 
 
-def _best_source(mention: Mention, sources: list[Source]) -> tuple[Source, bool] | None:
-    """The closest source the mention is a faithful rounding of, and whether it is approximate."""
-    best: tuple[tuple[int, float, int], Source] | None = None
+_SENTENCE_END = re.compile(r"[.!?;:]\s|\n")
+
+
+def _sentence_words(text: str, start: int, end: int) -> set[str]:
+    """The words of the sentence (or clause) a figure sits in."""
+    left = 0
+    for boundary in _SENTENCE_END.finditer(text, 0, start):
+        left = boundary.end()
+    right = _SENTENCE_END.search(text, end)
+    return _words(text[left : right.start() if right else len(text)])
+
+
+_EXACT, _ROUNDED, _APPROXIMATE = 0, 1, 2
+
+
+@dataclass(frozen=True)
+class Match:
+    source: Source
+    approximate: bool
+    alternatives: int  # other tool outputs the same figure is also a faithful rounding of
+
+
+def _best_source(
+    mention: Mention, sources: list[Source], context: set[str] | None = None
+) -> Match | None:
+    """The source a mention most plausibly came from, among those it is a faithful rounding of."""
+    best: tuple[tuple[int, int, int, float, int], Source] | None = None
+    faithful = 0
     slack = 1e-9 * max(1.0, mention.value)
     for order, source in enumerate(sources):
         field = source.field
@@ -265,22 +352,25 @@ def _best_source(mention: Mention, sources: list[Source]) -> tuple[Source, bool]
         candidate = abs(source.value) * _scale(mention.unit, field)
         error = abs(candidate - mention.value)
         if mention.value == 0:
-            rank = 0 if candidate < 1e-12 else None
+            rank = _EXACT if candidate < 1e-12 else None
+        elif error <= slack:
+            rank = _EXACT  # the figure reproduces the value: "20%" for 20.0
         elif error <= mention.tolerance + slack:
-            rank = 0
+            rank = _ROUNDED  # the value rounds to the figure: "18.7%" for 0.186872
         elif mention.loose_tolerance is not None and error <= mention.loose_tolerance:
-            rank = 1
+            rank = _APPROXIMATE  # a round figure: "$63,000" for 63,313.05
         else:
             rank = None
         if rank is None:
             continue
-        # Exact roundings beat approximate ones, then the closest value, then the earliest call.
-        key = (rank, round(error, 12), order)
+        faithful += 1
+        overlap = len(source.words & context) if context else 0
+        key = (rank, -overlap, source.depth, round(error, 12), order)
         if best is None or key < best[0]:
             best = (key, source)
     if best is None:
         return None
-    return best[1], best[0][0] == 1
+    return Match(best[1], best[0][0] == _APPROXIMATE, faithful - 1)
 
 
 def check_provenance(
@@ -301,7 +391,7 @@ def check_provenance(
     for mention in mentions:
         if mention.start > cursor:
             segments.append({"text": answer[cursor : mention.start]})
-        found = _best_source(mention, sources)
+        found = _best_source(mention, sources, _sentence_words(answer, mention.start, mention.end))
         entry: dict[str, Any] = {
             "text": mention.text,
             "value": -mention.value if mention.negative else mention.value,
@@ -312,16 +402,17 @@ def check_provenance(
             "path": None,
             "sourceValue": None,
             "approximate": False,
+            "alternatives": 0,
         }
         if found is not None:
-            source, approximate = found
             entry.update(
                 status="matched",
-                callId=source.call_id,
-                tool=source.tool,
-                path=source.path,
-                sourceValue=source.value,
-                approximate=approximate,
+                callId=found.source.call_id,
+                tool=found.source.tool,
+                path=found.source.path,
+                sourceValue=found.source.value,
+                approximate=found.approximate,
+                alternatives=found.alternatives,
             )
         elif (mention.value, mention.unit) in asked:
             entry["status"] = "question"

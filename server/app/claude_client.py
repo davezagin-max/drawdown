@@ -46,6 +46,14 @@ class MissingKeyError(Exception):
     """A missing or malformed key, caught before any network call."""
 
 
+class PipelineError(Exception):
+    """A failure whose message is written for the visitor (for example a cut-off answer)."""
+
+    def __init__(self, message: str, status: int = 502):
+        super().__init__(message)
+        self.status = status
+
+
 @dataclass
 class ToolCall:
     id: str
@@ -142,11 +150,15 @@ def call_claude(
     max_tokens: int = 16_000,
     on_progress: Callable[[str], None] | None = None,
     on_tool_call: Callable[[ToolCall], None] | None = None,
+    should_stop: Callable[[], bool] | None = None,
 ) -> CallResult:
     """One Claude request, or a full tool loop when `handlers` is given.
 
     `messages` is not mutated; the result carries the extended history.
     `max_tokens` must leave room for thinking, which counts toward the limit.
+    `should_stop` is asked before every request; when it returns True the loop ends
+    with `stop_reason == "cancelled"` and no further request is made, so an abandoned
+    run stops spending the visitor's key.
     """
     use_fallback = REFUSAL_FALLBACK and model != HAIKU
     wants_updates = on_progress is not None and model != HAIKU
@@ -223,6 +235,21 @@ def call_claude(
         )
 
     while True:
+        if should_stop is not None and should_stop():
+            return CallResult(
+                ok=False,
+                text="",
+                parsed=None,
+                tool_calls=calls,
+                messages=history,
+                stop_reason="cancelled",
+                refusal=None,
+                usage=usage,
+                cost_usd=cost,
+                model=model,
+                rounds=round_no,
+                progress=notes,
+            )
         round_no += 1
         message = client.beta.messages.create(**params, messages=history)
         usage = usage.plus(message.usage)
@@ -290,6 +317,8 @@ def api_error(error: Exception) -> tuple[int, str]:
     """Map SDK errors to a safe (status, message). Never includes the key or request body."""
     if isinstance(error, MissingKeyError):
         return 401, str(error)
+    if isinstance(error, PipelineError):
+        return error.status, str(error)
     if isinstance(error, anthropic.AuthenticationError):
         return 401, "Anthropic rejected that API key."
     if isinstance(error, anthropic.PermissionDeniedError):

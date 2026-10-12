@@ -57,7 +57,7 @@ def post(url: str, body: dict) -> tuple[bool, dict, str]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--budget", type=float, default=2.0)
-    parser.add_argument("--port", type=int, default=8111)
+    parser.add_argument("--port", type=int, default=8300)
     parser.add_argument("--only", default="")
     parser.add_argument("--app", default="app.main:app")
     args = parser.parse_args()
