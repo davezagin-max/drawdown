@@ -70,15 +70,13 @@ _ROWS: list[tuple[str, str, str]] = [
     ("LIN", "Linde", "Materials"),
     ("TLT", "20+ Year Treasury Bond ETF", "Fixed Income"),
     ("GLD", "Gold ETF", "Commodities"),
-    (BENCHMARK, "S&P 500 ETF", "Benchmark"),
+    (BENCHMARK, "S&P 500 ETF", "Broad Market"),
 ]
 
 UNIVERSE: dict[str, Security] = {t: Security(t, name, sector) for t, name, sector in _ROWS}
 TICKERS: list[str] = list(UNIVERSE)
-# Sectors a holding can belong to, in display order. The benchmark is not a sector.
-SECTORS: list[str] = list(
-    dict.fromkeys(s.sector for s in UNIVERSE.values() if s.ticker != BENCHMARK)
-)
+# Sectors in display order. The benchmark ETF can be held too, as its own "Broad Market" sector.
+SECTORS: list[str] = list(dict.fromkeys(s.sector for s in UNIVERSE.values()))
 
 
 def sector_of(ticker: str) -> str:

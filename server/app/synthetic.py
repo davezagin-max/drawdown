@@ -144,6 +144,8 @@ def generate_prices(seed: int = SEED) -> pd.DataFrame:
 
     sector_factor: dict[str, np.ndarray] = {}
     for sector in SECTORS:
+        if sector == sector_of(BENCHMARK):
+            continue  # the benchmark is the market factor itself
         extra = np.array([SECTOR_DRIFT.get(sector, {}).get(name, 0.0) for name in regime_of])
         sector_factor[sector] = extra + SECTOR_VOL * np.sqrt(vol_scale) * _fat_tailed(rng, 5, days)
 

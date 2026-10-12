@@ -13,7 +13,8 @@ from app.universe import BENCHMARK, SECTORS, TICKERS, UNIVERSE
 def test_universe_has_about_fifty_tickers_and_a_benchmark() -> None:
     assert len(TICKERS) == 52
     assert BENCHMARK in UNIVERSE
-    assert "Benchmark" not in SECTORS
+    assert UNIVERSE[BENCHMARK].sector == "Broad Market"
+    assert len(SECTORS) == 14
     assert set(PARAMS) == set(TICKERS) - {BENCHMARK}
 
 
