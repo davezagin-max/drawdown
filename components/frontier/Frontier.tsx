@@ -125,7 +125,7 @@ export function Frontier({
       )}
 
       <div className="-mx-3 mt-3 overflow-x-auto px-3">
-        <table className="w-full min-w-[24rem] border-collapse text-xs">
+        <table className="w-full min-w-[19rem] border-collapse text-xs">
           <caption className="sr-only">The three highlighted portfolios</caption>
           <thead>
             <tr className="border-b border-border text-left font-mono text-[10px] uppercase tracking-[0.1em] text-muted">
@@ -142,7 +142,8 @@ export function Frontier({
                 Sharpe
               </th>
               <th scope="col" className="py-1.5 text-right font-normal">
-                Worst fall
+                <span className="sm:hidden">Fall</span>
+                <span className="hidden sm:inline">Worst fall</span>
               </th>
             </tr>
           </thead>

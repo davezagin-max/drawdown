@@ -327,6 +327,12 @@ function SessionView({
             </p>
           )}
 
+          {state.status === "stopped" && (
+            <p className="text-xs leading-relaxed text-muted">
+              No answer: the run was stopped before the analyst finished.
+            </p>
+          )}
+
           {state.error && (
             <div
               role="alert"
