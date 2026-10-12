@@ -88,9 +88,9 @@ With the API running you can load your own holdings CSV, and with a key in the U
 
 To deploy: the Next.js app goes to Vercel as it is (`server/` is ignored there). The API runs anywhere Python does; set `ALLOWED_ORIGINS` on it to the site's origin and `NEXT_PUBLIC_API_URL` on the site to the API's address. Without that variable the site says live features are unavailable instead of failing.
 
-| Light theme                    | Phone                                              |
-| ------------------------------ | -------------------------------------------------- |
-| ![Light theme](docs/light.png) | ![The first screen at 390px wide](docs/mobile.png) |
+| Light theme                                               | Phone, first screen                                | Phone, the answer                                            |
+| --------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------ |
+| ![Light theme with a rebalancing session](docs/light.png) | ![The first screen at 390px wide](docs/mobile.png) | ![The checked answer at 390px wide](docs/mobile-analyst.png) |
 
 ## Tests & quality
 
