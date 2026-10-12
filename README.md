@@ -86,7 +86,7 @@ pnpm dev:api    # optional, second terminal: the risk engine on :8300 (needs uv)
 
 With the API running you can load your own holdings CSV, and with a key in the UI you can run the analyst live. `pnpm export` regenerates the bundled JSON after an engine change; `pnpm record` (with `ANTHROPIC_API_KEY` set) replaces the sample sessions with recorded runs.
 
-To deploy: the Next.js app goes to Vercel as it is (`server/` is ignored there). The API runs anywhere Python does; set `ALLOWED_ORIGINS` on it to the site's origin and `NEXT_PUBLIC_API_URL` on the site to the API's address. Without that variable the site says live features are unavailable instead of failing.
+To deploy: the Next.js app goes to Vercel as it is (`server/` is ignored there). The API runs anywhere Python does; set `ALLOWED_ORIGINS` on it to the site's origin and `NEXT_PUBLIC_API_URL` on the site to the API's address. Without that variable the site says live features are unavailable instead of failing. [`render.yaml`](render.yaml) is a Render blueprint for the API; its install and start commands are checked locally, and it has not been deployed yet.
 
 | Light theme                                               | Phone, first screen                                | Phone, the answer                                            |
 | --------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------ |
