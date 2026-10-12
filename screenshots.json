@@ -1,35 +1,109 @@
 {
+  "port": 3310,
   "shots": [
     {
-      "name": "hero",
-      "path": "/",
-      "theme": "light",
-      "viewport": "desktop",
-      "actions": [{ "click": "text=a powder day in the Wasatch" }, { "waitFor": "figure" }]
-    },
-    {
-      "name": "hero-dark",
+      "name": "first-screen",
       "path": "/",
       "theme": "dark",
       "viewport": "desktop",
-      "actions": [{ "click": "text=a powder day in the Wasatch" }, { "waitFor": "figure" }]
+      "actions": [
+        {
+          "wait": 600
+        }
+      ]
+    },
+    {
+      "name": "hero",
+      "path": "/",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 1040
+      },
+      "actions": [
+        {
+          "click": "[data-cta='play']"
+        },
+        {
+          "waitFor": "[data-session='done']"
+        },
+        {
+          "click": "[data-status='matched'] >> nth=5"
+        },
+        {
+          "wait": 400
+        }
+      ]
+    },
+    {
+      "name": "charts",
+      "path": "/",
+      "theme": "dark",
+      "viewport": {
+        "width": 1280,
+        "height": 1180
+      },
+      "actions": [
+        {
+          "waitFor": "[data-frontier][data-ready='true']"
+        },
+        {
+          "scroll": 640
+        },
+        {
+          "wait": 700
+        }
+      ]
+    },
+    {
+      "name": "light",
+      "path": "/",
+      "theme": "light",
+      "viewport": "desktop",
+      "fullPage": true,
+      "actions": [
+        {
+          "click": "[data-cta='play']"
+        },
+        {
+          "waitFor": "[data-session='done']"
+        },
+        {
+          "waitFor": "[data-frontier][data-ready='true']"
+        },
+        {
+          "wait": 400
+        }
+      ]
     },
     {
       "name": "mobile",
       "path": "/",
       "theme": "dark",
       "viewport": "mobile",
-      "actions": [{ "click": "text=the first drop in a house set" }, { "waitFor": "figure" }]
+      "actions": [
+        {
+          "wait": 500
+        }
+      ]
+    },
+    {
+      "name": "mobile-full",
+      "path": "/",
+      "theme": "dark",
+      "viewport": "mobile",
+      "fullPage": true,
+      "actions": [
+        {
+          "click": "[data-cta='play']"
+        },
+        {
+          "waitFor": "[data-session='done']"
+        },
+        {
+          "wait": 600
+        }
+      ]
     }
-  ],
-  "gif": {
-    "path": "/",
-    "theme": "dark",
-    "actions": [
-      { "wait": 500 },
-      { "click": "text=a powder day in the Wasatch" },
-      { "waitFor": "figure" },
-      { "wait": 1200 }
-    ]
-  }
+  ]
 }

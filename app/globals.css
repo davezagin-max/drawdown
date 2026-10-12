@@ -1,32 +1,66 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Components only reference tokens, so a project gets its own
- * visual identity (and dark mode) by changing the values in these two blocks.
+ * Design tokens. Components only reference tokens, so both themes follow from
+ * the two blocks below. Drawdown's identity is a dark terminal with amber
+ * accents; the light theme is the same layout on a cool paper white.
+ *
+ * Chart colors were checked with a palette validator in both themes: the two
+ * series colors sit inside the lightness band for their surface, clear 3:1
+ * contrast against it, and stay apart under simulated color blindness.
  */
 :root {
-  --bg: #ffffff;
-  --fg: #14161a;
-  --muted: #5c6370;
-  --surface: #f4f5f7;
-  --border: #d9dce1;
-  --accent: #1f5eff;
+  --bg: #f4f5f7;
+  --fg: #12151a;
+  --muted: #59616d;
+  --surface: #ffffff;
+  --raised: #eceef1;
+  --border: #d3d8df;
+  --accent: #9a5800;
   --accent-fg: #ffffff;
+  --accent-soft: #f6e7cf;
   --danger: #b3261e;
-  --success: #1a7f37;
+  --danger-soft: #fbe4e2;
+  --success: #17703a;
+
+  /* charts */
+  --series-1: #b46a00; /* the portfolio */
+  --series-2: #2a6fc9; /* the SPY benchmark */
+  --grid: #e3e6eb;
+  --axis: #b8bec8;
+  --div-neg: #2a6fc9; /* correlation -1 */
+  --div-mid: #eceef1; /* correlation 0 */
+  --div-pos: #c4670a; /* correlation +1 */
+  --seq-lo: #efe3cf; /* low Sharpe recedes toward the surface */
+  --seq-mid: #d9952b;
+  --seq-hi: #7a4300;
   color-scheme: light;
 }
 
 [data-theme="dark"] {
-  --bg: #0e1013;
-  --fg: #eceef2;
-  --muted: #9aa2ae;
-  --surface: #171a1f;
-  --border: #2b3038;
-  --accent: #7aa7ff;
-  --accent-fg: #0e1013;
-  --danger: #ff8a80;
-  --success: #56d364;
+  --bg: #090b0d;
+  --fg: #e8e4d9;
+  --muted: #8d939d;
+  --surface: #0f1215;
+  --raised: #161a1f;
+  --border: #252a32;
+  --accent: #ffb000;
+  --accent-fg: #0a0c0e;
+  --accent-soft: #2b2110;
+  --danger: #ff7b6e;
+  --danger-soft: #331613;
+  --success: #57c98a;
+
+  --series-1: #c98500;
+  --series-2: #3987e5;
+  --grid: #1b1f25;
+  --axis: #39404a;
+  --div-neg: #3987e5;
+  --div-mid: #1c2026;
+  --div-pos: #e08a1e;
+  --seq-lo: #4d3a12;
+  --seq-mid: #b47a08;
+  --seq-hi: #ffd166;
   color-scheme: dark;
 }
 
@@ -37,11 +71,18 @@
   --color-fg: var(--fg);
   --color-muted: var(--muted);
   --color-surface: var(--surface);
+  --color-raised: var(--raised);
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
   --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
   --color-success: var(--success);
+  --color-series-1: var(--series-1);
+  --color-series-2: var(--series-2);
+  --color-grid: var(--grid);
+  --color-axis: var(--axis);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -51,9 +92,24 @@ body {
   color: var(--fg);
 }
 
+/* Numbers line up in columns everywhere they are set in the mono face. */
+.font-mono {
+  font-variant-numeric: tabular-nums;
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+@keyframes drawdown-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.cursor-blink {
+  animation: drawdown-blink 1s steps(2, start) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

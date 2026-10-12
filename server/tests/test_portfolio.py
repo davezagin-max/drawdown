@@ -186,6 +186,9 @@ def test_random_weights_are_long_only_and_sum_to_one() -> None:
     assert np.all(weights >= 0)
     assert np.allclose(weights.sum(axis=1), 1.0)
     assert weights.max() > 0.8  # some mixes are nearly a single holding
+    held = (weights > 0).sum(axis=1)
+    assert held.min() >= 2 and held.max() == 12  # subsets of every size, never a lone asset
+    assert len(set(held.tolist())) > 6
 
 
 def test_vectorised_stats_agree_with_the_scalar_engine() -> None:

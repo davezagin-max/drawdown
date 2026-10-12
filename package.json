@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3300",
+    "dev:api": "cd server && uv run uvicorn app.main:app --reload --port 8300",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -12,7 +13,8 @@
     "format": "prettier --write .",
     "check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "smoke": "vitest run tests/kit/smoke.live.test.ts",
-    "record": "node scripts/record.mjs",
+    "record": "cd server && uv run python scripts/record.py && uv run python scripts/export_demo.py",
+    "export": "cd server && uv run python scripts/export_demo.py",
     "screenshots": "node scripts/screenshot.mjs"
   },
   "dependencies": {
@@ -20,6 +22,7 @@
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
+    "three": "^0.170.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {
@@ -27,6 +30,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.170.0",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
     "playwright": "^1.64.0",

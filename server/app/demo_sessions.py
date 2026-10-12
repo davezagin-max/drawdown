@@ -49,8 +49,8 @@ def _risk_sources(o: Outputs) -> str:
     top, low = shares["positions"][0], shares["positions"][-1]
     if low["risk_share"] < 0:
         tail = (
-            f"At the other end, {low['ticker']} has a slightly negative risk share "
-            f"(-{pct(low['risk_share'])}): it has tended to move against the rest, which "
+            f"At the other end, {low['ticker']}'s risk share is slightly negative, at "
+            f"-{pct(low['risk_share'])}: it has tended to move against the rest, which "
             "dampens the swings."
         )
     else:
@@ -77,7 +77,7 @@ def _market_drop(o: Outputs) -> str:
     gainers = [p for p in combined["positions"] if p["change_usd"] > 0]
     hedge = (
         f" {gainers[-1]['ticker']} is the only holding that gains, because its beta is "
-        f"negative ({gainers[-1]['beta']:.2f})."
+        f"negative, at {gainers[-1]['beta']:.2f}."
         if len(gainers) == 1
         else ""
     )
@@ -115,7 +115,7 @@ def _trim_tech(o: Outputs) -> str:
         f"value at risk would move from {pct(before['var_95'], 2)} to "
         f"{pct(after['var_95'], 2)}.\n\n"
         f"For context, a simulation of the current mix over {simulation['horizon_days']} "
-        f"trading days ({simulation['simulations']:,} paths) ends with a loss in "
+        f"trading days, across {simulation['simulations']:,} paths, ends with a loss in "
         f"{pct(simulation['probability_of_loss'], 0)} of them. The middle outcome is a gain "
         f"of {pct(percentiles['p50'])} and the 5th-percentile outcome is a loss of "
         f"{pct(percentiles['p5'])}. None of this says which mix is better. It describes how "

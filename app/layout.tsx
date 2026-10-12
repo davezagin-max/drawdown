@@ -8,8 +8,9 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Starter",
-  description: "Portfolio project starter.",
+  title: "Drawdown: portfolio risk X-ray",
+  description:
+    "A deterministic risk engine computes every number. Claude Opus 5.5 explains them and runs what-if stress tests through tools, and code verifies every figure it quotes.",
 };
 
 export const viewport: Viewport = {

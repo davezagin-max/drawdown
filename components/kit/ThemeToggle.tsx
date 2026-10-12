@@ -26,7 +26,7 @@ function setTheme(theme: Theme): void {
 }
 
 export function ThemeToggle({ className = "" }: { className?: string }) {
-  const theme = useSyncExternalStore<Theme>(subscribe, currentTheme, () => "light");
+  const theme = useSyncExternalStore<Theme>(subscribe, currentTheme, () => "dark");
   const next: Theme = theme === "dark" ? "light" : "dark";
 
   return (

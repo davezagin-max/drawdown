@@ -13,7 +13,7 @@
   "costUsd": 0,
   "data": {
    "question": "What happens if the market falls 20% and technology drops a further 10%?",
-   "answer": "In this scenario the portfolio falls 25.3%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative (-0.21).\n\nFor scale, the worst fall in this simulated history was 30.0%, so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
+   "answer": "In this scenario the portfolio falls 25.3%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative, at -0.21.\n\nFor scale, the worst fall in this simulated history was 30.0%, so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
    "calls": [
     {
      "id": "toolu_sample_01",
@@ -310,14 +310,14 @@
       "number": 8
      },
      {
-      "text": ". TLT is the only holding that gains, because its beta is negative ("
+      "text": ". TLT is the only holding that gains, because its beta is negative, at "
      },
      {
       "text": "-0.21",
       "number": 9
      },
      {
-      "text": ").\n\nFor scale, the worst fall in this simulated history was "
+      "text": ".\n\nFor scale, the worst fall in this simulated history was "
      },
      {
       "text": "30.0%",
@@ -467,7 +467,7 @@
     "ignored": []
    },
    "selfTest": {
-    "answer": "In this scenario the portfolio falls 35.7%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative (-0.21).\n\nFor scale, the worst fall in this simulated history was 30.0%, so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
+    "answer": "In this scenario the portfolio falls 35.7%, a loss of about $63,313 that leaves $186,687. A 20% market fall on its own accounts for 21.5%: the portfolio's beta is 1.08, so it moves slightly more than the market.\n\nThe extra 10% hit to technology adds the rest, because technology is 38% of the portfolio. NVDA is the largest single loss at $15,507. TLT is the only holding that gains, because its beta is negative, at -0.21.\n\nFor scale, the worst fall in this simulated history was 30.0%, so the scenario is shallower than anything the history contains. The estimate is linear: it scales each holding by its beta and ignores how correlations shift in a real sell-off.",
     "provenance": {
      "segments": [
       {
@@ -534,14 +534,14 @@
        "number": 8
       },
       {
-       "text": ". TLT is the only holding that gains, because its beta is negative ("
+       "text": ". TLT is the only holding that gains, because its beta is negative, at "
       },
       {
        "text": "-0.21",
        "number": 9
       },
       {
-       "text": ").\n\nFor scale, the worst fall in this simulated history was "
+       "text": ".\n\nFor scale, the worst fall in this simulated history was "
       },
       {
        "text": "30.0%",
@@ -1003,7 +1003,7 @@
   "costUsd": 0,
   "data": {
    "question": "Where is the risk in this portfolio coming from?",
-   "answer": "The portfolio's volatility is 18.7% a year, against 15.7% for the SPY benchmark, and its beta of 1.08 means it tends to move a little more than the market does.\n\nMost of that risk sits in one place. Technology is 38% of the money, and NVDA alone is 14% of the weight but 25.7% of the portfolio's variance. At the other end, TLT has a slightly negative risk share (-1.1%): it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was 30.0%, from 30 March 2022 to 4 August 2022, over 91 trading days. On an ordinary bad day, the 95% one-day value at risk is 1.7%, or about $4,259.",
+   "answer": "The portfolio's volatility is 18.7% a year, against 15.7% for the SPY benchmark, and its beta of 1.08 means it tends to move a little more than the market does.\n\nMost of that risk sits in one place. Technology is 38% of the money, and NVDA alone is 14% of the weight but 25.7% of the portfolio's variance. At the other end, TLT's risk share is slightly negative, at -1.1%: it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was 30.0%, from 30 March 2022 to 4 August 2022, over 91 trading days. On an ordinary bad day, the 95% one-day value at risk is 1.7%, or about $4,259.",
    "calls": [
     {
      "id": "toolu_sample_01",
@@ -1267,14 +1267,14 @@
       "number": 5
      },
      {
-      "text": " of the portfolio's variance. At the other end, TLT has a slightly negative risk share ("
+      "text": " of the portfolio's variance. At the other end, TLT's risk share is slightly negative, at "
      },
      {
       "text": "-1.1%",
       "number": 6
      },
      {
-      "text": "): it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was "
+      "text": ": it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was "
      },
      {
       "text": "30.0%",
@@ -1473,7 +1473,7 @@
     ]
    },
    "selfTest": {
-    "answer": "The portfolio's volatility is 26.6% a year, against 15.7% for the SPY benchmark, and its beta of 1.08 means it tends to move a little more than the market does.\n\nMost of that risk sits in one place. Technology is 38% of the money, and NVDA alone is 14% of the weight but 25.7% of the portfolio's variance. At the other end, TLT has a slightly negative risk share (-1.1%): it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was 30.0%, from 30 March 2022 to 4 August 2022, over 91 trading days. On an ordinary bad day, the 95% one-day value at risk is 1.7%, or about $4,259.",
+    "answer": "The portfolio's volatility is 26.6% a year, against 15.7% for the SPY benchmark, and its beta of 1.08 means it tends to move a little more than the market does.\n\nMost of that risk sits in one place. Technology is 38% of the money, and NVDA alone is 14% of the weight but 25.7% of the portfolio's variance. At the other end, TLT's risk share is slightly negative, at -1.1%: it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was 30.0%, from 30 March 2022 to 4 August 2022, over 91 trading days. On an ordinary bad day, the 95% one-day value at risk is 1.7%, or about $4,259.",
     "provenance": {
      "segments": [
       {
@@ -1519,14 +1519,14 @@
        "number": 5
       },
       {
-       "text": " of the portfolio's variance. At the other end, TLT has a slightly negative risk share ("
+       "text": " of the portfolio's variance. At the other end, TLT's risk share is slightly negative, at "
       },
       {
        "text": "-1.1%",
        "number": 6
       },
       {
-       "text": "): it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was "
+       "text": ": it has tended to move against the rest, which dampens the swings.\n\nThe worst fall in this history was "
       },
       {
        "text": "30.0%",
@@ -2043,7 +2043,7 @@
   "costUsd": 0,
   "data": {
    "question": "What would cutting technology to 20% of the portfolio do to its risk?",
-   "answer": "Technology is 38% of the portfolio today. Moving it to 20% and scaling every other holding up in proportion would mean trading 18% of the portfolio, about $45,000.\n\nOn this history, volatility would go from 18.7% to 17.1%, beta from 1.08 to 0.99, and the worst fall from 30.0% to 25.0%. The 95% one-day value at risk would move from 1.70% to 1.54%.\n\nFor context, a simulation of the current mix over 252 trading days (5,000 paths) ends with a loss in 19% of them. The middle outcome is a gain of 17.4% and the 5th-percentile outcome is a loss of 13.2%. None of this says which mix is better. It describes how the risk numbers would have differed.",
+   "answer": "Technology is 38% of the portfolio today. Moving it to 20% and scaling every other holding up in proportion would mean trading 18% of the portfolio, about $45,000.\n\nOn this history, volatility would go from 18.7% to 17.1%, beta from 1.08 to 0.99, and the worst fall from 30.0% to 25.0%. The 95% one-day value at risk would move from 1.70% to 1.54%.\n\nFor context, a simulation of the current mix over 252 trading days, across 5,000 paths, ends with a loss in 19% of them. The middle outcome is a gain of 17.4% and the 5th-percentile outcome is a loss of 13.2%. None of this says which mix is better. It describes how the risk numbers would have differed.",
    "calls": [
     {
      "id": "toolu_sample_01",
@@ -2321,14 +2321,14 @@
       "number": 13
      },
      {
-      "text": " trading days ("
+      "text": " trading days, across "
      },
      {
       "text": "5,000",
       "number": 14
      },
      {
-      "text": " paths) ends with a loss in "
+      "text": " paths, ends with a loss in "
      },
      {
       "text": "19%",
@@ -2581,7 +2581,7 @@
     ]
    },
    "selfTest": {
-    "answer": "Technology is 53% of the portfolio today. Moving it to 20% and scaling every other holding up in proportion would mean trading 18% of the portfolio, about $45,000.\n\nOn this history, volatility would go from 18.7% to 17.1%, beta from 1.08 to 0.99, and the worst fall from 30.0% to 25.0%. The 95% one-day value at risk would move from 1.70% to 1.54%.\n\nFor context, a simulation of the current mix over 252 trading days (5,000 paths) ends with a loss in 19% of them. The middle outcome is a gain of 17.4% and the 5th-percentile outcome is a loss of 13.2%. None of this says which mix is better. It describes how the risk numbers would have differed.",
+    "answer": "Technology is 53% of the portfolio today. Moving it to 20% and scaling every other holding up in proportion would mean trading 18% of the portfolio, about $45,000.\n\nOn this history, volatility would go from 18.7% to 17.1%, beta from 1.08 to 0.99, and the worst fall from 30.0% to 25.0%. The 95% one-day value at risk would move from 1.70% to 1.54%.\n\nFor context, a simulation of the current mix over 252 trading days, across 5,000 paths, ends with a loss in 19% of them. The middle outcome is a gain of 17.4% and the 5th-percentile outcome is a loss of 13.2%. None of this says which mix is better. It describes how the risk numbers would have differed.",
     "provenance": {
      "segments": [
       {
@@ -2683,14 +2683,14 @@
        "number": 13
       },
       {
-       "text": " trading days ("
+       "text": " trading days, across "
       },
       {
        "text": "5,000",
        "number": 14
       },
       {
-       "text": " paths) ends with a loss in "
+       "text": " paths, ends with a loss in "
       },
       {
        "text": "19%",

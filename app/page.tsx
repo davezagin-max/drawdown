@@ -1,19 +1,36 @@
+import presetList from "@/fixtures/presets.json";
+import sampleBundle from "@/fixtures/sample.json";
+import { Dashboard } from "@/components/Dashboard";
+import { Disclaimer } from "@/components/Disclaimer";
 import { DemoBanner } from "@/components/kit/DemoBanner";
 import { ThemeToggle } from "@/components/kit/ThemeToggle";
-import { ExampleDemo } from "./ExampleDemo";
+import { analystPlaceholder } from "@/lib/analyst-route";
+import { Preset, SampleBundle } from "@/lib/schema";
 
-/** Starter page. Replace with the project's real UI; it shows the kit wired end to end. */
+// Both files are written by server/scripts/export_demo.py. Parsing them here means a
+// stale or hand-edited bundle fails the build instead of rendering wrong numbers.
+const sample = SampleBundle.parse(sampleBundle);
+const presets = Preset.array()
+  .parse(presetList)
+  .map((preset) => preset.body);
+
 export default function Home() {
   return (
     <>
-      <DemoBanner placeholder />
-      <header className="flex items-center justify-between border-b border-border px-4 py-3">
-        <h1 className="text-base font-semibold">Starter</h1>
+      <DemoBanner placeholder={analystPlaceholder} />
+      <header className="flex items-center justify-between gap-4 border-b border-border px-3 py-2 sm:px-4">
+        <p className="flex min-w-0 items-baseline gap-3">
+          <span className="font-mono text-sm font-semibold tracking-[0.22em] text-fg">
+            DRAWDOWN
+          </span>
+          <span className="hidden truncate text-xs text-muted sm:inline">
+            A risk engine computes every number. Claude explains them.
+          </span>
+        </p>
         <ThemeToggle />
       </header>
-      <main id="main" className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-8">
-        <ExampleDemo />
-      </main>
+      <Disclaimer synthetic={sample.analysis.dataset.synthetic} />
+      <Dashboard sample={sample} presets={presets} placeholder={analystPlaceholder} />
       <footer className="border-t border-border px-4 py-4 text-center text-xs text-muted">
         Built with Claude Code and Claude Opus 5.5.
       </footer>

@@ -65,7 +65,9 @@ async function perform(page, actions = []) {
 }
 
 async function open(browser, spec, extra = {}) {
-  const viewport = VIEWPORTS[spec.viewport ?? "desktop"];
+  // A named size, or an explicit { width, height } for a shot that needs more room.
+  const viewport =
+    typeof spec.viewport === "object" ? spec.viewport : VIEWPORTS[spec.viewport ?? "desktop"];
   const theme = spec.theme ?? "light";
   const context = await browser.newContext({
     viewport,
@@ -97,7 +99,10 @@ try {
 
   if (config.gif) {
     const videoDir = path.join(out, ".video");
-    const size = VIEWPORTS[config.gif.viewport ?? "desktop"];
+    const size =
+      typeof config.gif.viewport === "object"
+        ? config.gif.viewport
+        : VIEWPORTS[config.gif.viewport ?? "desktop"];
     const { context, page } = await open(
       browser,
       { ...config.gif, motion: true },

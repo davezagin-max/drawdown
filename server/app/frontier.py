@@ -16,14 +16,22 @@ from .portfolio import Portfolio
 FRONTIER_SEED = 11
 DEFAULT_POINTS = 3000
 # Dirichlet concentration: small values give lopsided mixes, large ones near-equal mixes.
-# Mixing them spreads the cloud from single-stock corners to the diversified middle.
-CONCENTRATIONS = (0.15, 0.4, 1.0, 2.5, 6.0)
+CONCENTRATIONS = (0.3, 1.0, 3.0)
 
 
 def random_weights(count: int, assets: int, rng: np.random.Generator) -> np.ndarray:
-    """`count` long-only weight vectors that each sum to 1."""
+    """`count` long-only weight vectors that each sum to 1.
+
+    Each mix holds a random subset of the assets (two or more of them, when there are
+    that many), weighted by a Dirichlet draw. Mixing subset sizes and concentrations
+    spreads the cloud from near-single-holding corners to the diversified middle.
+    Weighting all the assets every time would bunch every point around the average.
+    """
     alpha = rng.choice(CONCENTRATIONS, size=(count, 1))
     draws = rng.gamma(shape=np.broadcast_to(alpha, (count, assets)))
+    held = rng.integers(min(2, assets), assets + 1, size=(count, 1))
+    order = rng.random((count, assets)).argsort(axis=1).argsort(axis=1)  # a random ranking per mix
+    draws = np.where(order < held, draws, 0.0)
     totals = draws.sum(axis=1, keepdims=True)
     return np.where(totals > 0, draws / np.where(totals > 0, totals, 1.0), 1.0 / assets)
 
