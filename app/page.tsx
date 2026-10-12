@@ -4,7 +4,7 @@ import { Dashboard } from "@/components/Dashboard";
 import { Disclaimer } from "@/components/Disclaimer";
 import { DemoBanner } from "@/components/kit/DemoBanner";
 import { ThemeToggle } from "@/components/kit/ThemeToggle";
-import { analystPlaceholder } from "@/lib/analyst-route";
+import { analystFixtures, analystPlaceholder } from "@/lib/analyst-route";
 import { Preset, SampleBundle } from "@/lib/schema";
 
 // Both files are written by server/scripts/export_demo.py. Parsing them here means a
@@ -12,7 +12,12 @@ import { Preset, SampleBundle } from "@/lib/schema";
 const sample = SampleBundle.parse(sampleBundle);
 const presets = Preset.array()
   .parse(presetList)
-  .map((preset) => preset.body);
+  .map((preset) => ({
+    ...preset.body,
+    // Each preset is labelled by its own fixture, so the wording stays right while
+    // some sessions are recorded and others are still samples.
+    placeholder: analystFixtures[preset.body.demoId]?.placeholder ?? true,
+  }));
 
 export default function Home() {
   return (

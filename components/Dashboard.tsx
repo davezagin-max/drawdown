@@ -51,7 +51,9 @@ export function Dashboard({
   function play() {
     const first = presets[0];
     if (!first) return;
-    analyst.run(isLive ? { question: first.question } : first);
+    analyst.run(
+      isLive ? { question: first.question } : { demoId: first.demoId, question: first.question },
+    );
     // On a phone the analyst sits below the numbers; bring it up so the run is visible.
     const panel = document.getElementById("analyst");
     if (panel && panel.getBoundingClientRect().top > window.innerHeight * 0.55) {
@@ -65,9 +67,10 @@ export function Dashboard({
     setUploaded(next);
   }
 
+  // The button plays the first preset, so its wording follows that preset's own fixture.
   const playLabel = isLive
     ? "Ask the analyst"
-    : placeholder
+    : (presets[0]?.placeholder ?? placeholder)
       ? "Play a sample analyst session"
       : "Replay a recorded analyst session";
 

@@ -10,6 +10,8 @@ import type { Analyst, AnalystState } from "./useAnalyst";
 export interface PresetQuestion {
   demoId: string;
   question: string;
+  /** This preset's bundled session is a hand-written sample, not a recorded run. */
+  placeholder: boolean;
 }
 
 const PRESET_LABELS: Record<string, string> = {
@@ -481,7 +483,13 @@ export function AnalystPanel({
                 data-preset={preset.demoId}
                 disabled={busy || !presetsUsable}
                 title={preset.question}
-                onClick={() => run(isLive ? { question: preset.question } : preset)}
+                onClick={() =>
+                  run(
+                    isLive
+                      ? { question: preset.question }
+                      : { demoId: preset.demoId, question: preset.question },
+                  )
+                }
                 className="flex items-center justify-between gap-2 border border-border bg-bg px-2.5 py-2 text-left text-xs text-fg hover:border-accent disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <span>{PRESET_LABELS[preset.demoId] ?? preset.question}</span>
