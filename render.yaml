@@ -19,5 +19,6 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.3
+      # The site's own origin, entered at deploy time once the site has a URL.
       - key: ALLOWED_ORIGINS
-        value: https://drawdown.vercel.app
+        sync: false

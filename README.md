@@ -1,24 +1,40 @@
 # Drawdown
 
-> A portfolio risk X-ray. A deterministic risk engine computes every number; Claude Opus 5.5 explains them and runs what-if stress tests through tools, and code checks every figure it quotes against the tool outputs.
+A risk report for a sample stock portfolio. Code computes every number; an AI analyst (Claude Opus 5.5) explains what they mean, and every number it quotes links back to the calculation it came from.
 
 [![CI](https://github.com/davezagin-max/drawdown/actions/workflows/ci.yml/badge.svg)](https://github.com/davezagin-max/drawdown/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Live demo](https://img.shields.io/badge/demo-live-brightgreen.svg)](https://drawdown.vercel.app)
+[![Live demo: coming soon](https://img.shields.io/badge/live%20demo-coming%20soon-lightgrey.svg)](#run-locally)
 
-![Drawdown: headline risk numbers, the analyst's tool calls, and an answer in which every figure links to the tool output it came from](docs/hero.png)
+![Drawdown after one click: the sample portfolio's risk numbers with a plain meaning under each, and the AI analyst's answer with every figure highlighted and linked to its source](docs/hero.png)
 
-**Educational only. Not financial advice.** Prices in this repository are simulated; ticker symbols and sectors are labels.
+_The app after one click on **Play a sample analyst session**: the portfolio's risk numbers at the top, the questions the analyst asked the risk engine on the left, and its answer on the right, where each highlighted number links to the calculation it came from._
+
+## What it does
+
+- **Measures how risky a stock portfolio is:** how much it grew, its worst fall, how much it swings, and how it compares with the market, from five years of daily prices.
+- **An AI analyst explains the numbers in plain English** and answers what-if questions such as "what if the market falls 20%?". It never does its own math: it has to ask the risk engine for every number it uses.
+- **Code checks the AI's work.** Every number in the answer is matched to the calculation it came from and shown as a clickable highlight. A number that cannot be traced is flagged in red.
+- **Works with no key and no sign-up.** One click plays a sample session.
+
+**Educational only. Not financial advice.** The prices are simulated for the demo; ticker symbols and sectors are only labels.
 
 ## Try it in 10 seconds
 
-**[Open the live demo](https://drawdown.vercel.app)**: no key, no sign-up. Click **Play a sample analyst session** and watch the tool calls arrive, several at a time. Click any highlighted figure in the answer to see the exact tool output it was taken from. Then press **Test the checker: alter a figure**: the page changes one number and the checker flags it.
+The live demo is coming soon. Until then it runs locally with no key (you need Node.js and pnpm; more under [Run locally](#run-locally)):
 
-Demo data in this commit is hand-written sample output; `pnpm record` replaces it with real Claude Opus 5.5 runs. To be exact about what is hand-written: the analyst's progress notes and its answers. Every number on the page, including every tool output inside those sessions, is computed by the risk engine, and the app labels the sessions as samples until real runs are recorded.
+```bash
+pnpm install
+pnpm dev        # open http://localhost:3300
+```
 
-Add your own Anthropic key in the app to ask the analyst your own questions. Live runs and your own holdings go to the Python risk API, so they need it running (see [Run locally](#run-locally)).
+Click **Play a sample analyst session** and watch the analyst ask the risk engine for numbers, several at a time, while a status line says what is happening. Click any highlighted number in the answer to see the exact calculation it came from. Then press **Test the checker: alter a figure**: the page changes one number and the checker flags it.
 
-![The demo: a session replays, a figure is traced to its tool call, the checker catches an altered figure, and the 3D frontier rotates](docs/demo.gif)
+![The one-click demo: a sample session plays with a plain status line, a figure is traced to its source, and the checker flags an altered figure](docs/demo.gif)
+
+Demo data in this commit is hand-written sample output; `pnpm record` replaces it with real Claude Opus 5.5 runs. In plain words: the analyst's notes and answers shown in the demo are pre-written examples, and the app says so. Every number on the page, including every number inside those answers, is computed by the risk engine.
+
+Add your own Anthropic API key in the app to ask the analyst your own questions. Live runs and your own holdings go to the Python risk API, so it needs to be running (see [Run locally](#run-locally)).
 
 ## Why it's interesting
 
@@ -86,7 +102,7 @@ pnpm dev:api    # optional, second terminal: the risk engine on :8300 (needs uv)
 
 With the API running you can load your own holdings CSV, and with a key in the UI you can run the analyst live. `pnpm export` regenerates the bundled JSON after an engine change; `pnpm record` (with `ANTHROPIC_API_KEY` set) replaces the sample sessions with recorded runs.
 
-To deploy: the Next.js app goes to Vercel as it is (`server/` is ignored there). The API runs anywhere Python does; set `ALLOWED_ORIGINS` on it to the site's origin and `NEXT_PUBLIC_API_URL` on the site to the API's address. Without that variable the site says live features are unavailable instead of failing. [`render.yaml`](render.yaml) is a Render blueprint for the API; its install and start commands are checked locally, and it has not been deployed yet.
+To deploy: the Next.js app goes to Vercel as it is (`server/` is ignored there). The API runs anywhere Python does; set `ALLOWED_ORIGINS` on it to the site's origin and `NEXT_PUBLIC_API_URL` on the site to the API's address. Without that variable the site says live features are unavailable instead of failing. [`render.yaml`](render.yaml) is a Render blueprint for the API (it asks for `ALLOWED_ORIGINS` when the service is created); its install and start commands are checked locally, and it has not been deployed yet.
 
 | Light theme                                               | Phone, first screen                                | Phone, the answer                                            |
 | --------------------------------------------------------- | -------------------------------------------------- | ------------------------------------------------------------ |
@@ -95,7 +111,7 @@ To deploy: the Next.js app goes to Vercel as it is (`server/` is ignored there).
 ## Tests & quality
 
 ```bash
-pnpm check                                  # lint, typecheck, 79 unit tests, production build
+pnpm check                                  # lint, typecheck, 85 unit tests, production build
 cd server && uv run pytest -q               # 191 tests
 cd server && uv run ruff check . && uv run ruff format --check . && uv run mypy
 ```
@@ -107,6 +123,7 @@ What the tests cover:
 - **Tools:** each handler on a four-day price history small enough to check by hand, and the schema limits the API enforces (no `minimum`, no `$ref`, all properties required).
 - **Analyst loop, with a fake client:** request shape, parallel tool results in one message, the no-tools retry, refusal, truncation, round limit, and that a visitor who leaves stops the model calls.
 - **Fixtures:** every stored tool call is re-run through the engine and every stored answer through the checker, in Python; every provenance chip is followed back to its tool output, in TypeScript. Assertions compare against each fixture's own `placeholder` flag, so they hold after real runs are recorded.
+- **Narration:** the plain-English status line follows each stage of a bundled session and reports the checker's verdict, including the altered-figure test.
 - **Smoke test:** a preset session replayed end to end through the real route handler with no key.
 
 CI runs the same checks plus a gitleaks secret scan on every push.
