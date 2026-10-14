@@ -13,6 +13,7 @@
  *     "gif": { "path": "/", "theme": "dark", "actions": [ ... ] }
  *   }
  * Actions: click, fill ([selector, text]), press, hover, waitFor (selector), wait (ms), scroll (px).
+ * The gif block also takes "viewport", "fps", "width", "colors", "dither", and "keepColors".
  * Output goes to docs/<name>.png and docs/demo.gif. The GIF needs ffmpeg on PATH.
  */
 import { execFileSync, spawn } from "node:child_process";
@@ -113,19 +114,28 @@ try {
     const video = await page.video().path();
     await context.close();
     const gif = path.join(out, "demo.gif");
+    // Optional size controls: "fps", "width", "colors", "dither". The recording is lossy, so
+    // near-identical frames are dropped first (mpdecimate); after that only the changed
+    // rectangle of each frame is re-encoded, which keeps a mostly still UI small.
+    // "keepColors" lists [from, to] pairs whose gradient must survive the shared palette:
+    // a small but important color (a red warning) is otherwise outvoted by the rest.
+    const { fps = 12, width = 800, colors = 128, dither = "bayer", keepColors = [] } = config.gif;
+    const height = Math.round((size.height * width) / size.width / 2) * 2;
+    const swatches = keepColors.map(
+      ([from, to], i) =>
+        `gradients=s=${width}x${height}:c0=${from.replace("#", "0x")}:c1=${to.replace("#", "0x")}:x0=0:y0=0:x1=${width - 1}:y1=0:nb_colors=2:speed=0:r=${fps}:d=0.5,setsar=1,format=rgb24[k${i}]`,
+    );
+    const paletteInputs = ["[pal]", ...keepColors.map((_, i) => `[k${i}]`)].join("");
+    const graph = [
+      `[0:v]scale=${width}:${height}:flags=lanczos,setsar=1,mpdecimate,fps=${fps},format=rgb24,split=2[pal][frames]`,
+      ...swatches,
+      `${paletteInputs}concat=n=${keepColors.length + 1}:v=1,palettegen=max_colors=${colors}[p]`,
+      `[frames][p]paletteuse=dither=${dither}:diff_mode=rectangle`,
+    ].join(";");
     try {
-      execFileSync(
-        "ffmpeg",
-        [
-          "-y",
-          "-i",
-          video,
-          "-vf",
-          "fps=12,scale=800:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128[p];[b][p]paletteuse=dither=bayer",
-          gif,
-        ],
-        { stdio: "ignore" },
-      );
+      execFileSync("ffmpeg", ["-y", "-i", video, "-filter_complex", graph, gif], {
+        stdio: "ignore",
+      });
       console.log(`wrote ${gif}`);
     } catch {
       console.warn("ffmpeg not available: skipped docs/demo.gif (add it to the manual checklist).");
