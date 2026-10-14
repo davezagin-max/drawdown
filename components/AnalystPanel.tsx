@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import type { NumberCheck, Provenance, Session, ToolCall } from "@/lib/schema";
+import { narrate } from "@/lib/narration";
 import { callHeadline, callSignature } from "@/lib/session";
 import { CostMeter } from "./kit/CostMeter";
 import { useKey } from "./kit/KeyProvider";
@@ -23,7 +24,7 @@ const PRESET_LABELS: Record<string, string> = {
 function sourceLine(source: { mode: "live" | "demo"; placeholder: boolean }): string {
   if (source.mode === "live") return "Live: Claude Opus 5.5, on your key.";
   return source.placeholder
-    ? "Sample session. The notes and the answer are hand-written until a real run is recorded. Every tool output is computed by the risk engine."
+    ? "Sample session: the analyst's notes and answer are pre-written examples until a real run is recorded. Every number the risk engine returns is computed by code."
     : "A recorded Claude Opus 5.5 session, replayed.";
 }
 
@@ -152,7 +153,7 @@ function Answer({
 
 function SourceLine({ check, calls }: { check: NumberCheck | null; calls: ToolCall[] }) {
   if (!check) {
-    return <>Select a highlighted figure to see the tool output it came from.</>;
+    return <>Click a highlighted number to see the calculation it came from.</>;
   }
   if (check.status === "unmatched") {
     return (
@@ -224,6 +225,14 @@ function SessionView({
   const activeCheck =
     showing && activeNumber !== null ? (showing.numbers[activeNumber] ?? null) : null;
   const source = state.source ?? (isLive ? { mode: "live" as const, placeholder: false } : null);
+  const narration = narrate({
+    status: state.status,
+    trail: state.trail,
+    session,
+    shown: showing ?? undefined,
+    live: source?.mode === "live",
+  });
+  const flagged = (showing?.unmatched ?? 0) > 0 || (session !== null && !session.usedTools);
 
   // When the answer lands below the fold (always, on a phone), bring it into view.
   const answer = useRef<HTMLDivElement>(null);
@@ -239,6 +248,23 @@ function SessionView({
       <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2 border-b border-border px-3 py-2.5">
         <div className="min-w-0">
           <p className="text-sm font-medium leading-snug text-fg">{state.question}</p>
+          {narration && (
+            <p
+              role="status"
+              data-narration
+              className={`mt-1.5 flex items-start gap-2 text-sm leading-snug ${
+                flagged ? "text-danger" : "text-accent"
+              }`}
+            >
+              <span
+                aria-hidden
+                className={`mt-[0.4em] size-1.5 shrink-0 ${flagged ? "bg-danger" : "bg-accent"} ${
+                  busy ? "cursor-blink" : ""
+                }`}
+              />
+              <span>{narration}</span>
+            </p>
+          )}
           {source && (
             <p className="mt-1 text-xs leading-relaxed text-muted">{sourceLine(source)}</p>
           )}
@@ -257,7 +283,10 @@ function SessionView({
       <div className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
         <div className="flex min-w-0 flex-col gap-3 p-3 lg:border-r lg:border-border">
           <h3 className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
-            Tool calls
+            Tool calls{" "}
+            <span className="normal-case tracking-normal">
+              {"·"} what the analyst asked the risk engine
+            </span>
           </h3>
           <ol className="flex flex-col gap-3" aria-live="polite">
             {state.trail.retried && (
@@ -321,11 +350,14 @@ function SessionView({
           ref={answer}
           className="flex min-w-0 scroll-mb-4 scroll-mt-12 flex-col gap-2.5 border-t border-border p-3 lg:border-t-0"
         >
-          <h3 className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">Answer</h3>
+          <h3 className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
+            Answer{" "}
+            <span className="normal-case tracking-normal">{"·"} every number checked by code</span>
+          </h3>
           {busy && (
             <p className="text-xs leading-relaxed text-muted">
-              The answer appears here once the tools have returned. Each figure in it is then
-              matched against the tool outputs on the left.
+              The answer appears here once the analyst has the numbers it asked for. Code then
+              matches every number in it against what the risk engine returned.
             </p>
           )}
 
@@ -458,13 +490,13 @@ export function AnalystPanel({
           id="analyst-title"
           className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-fg"
         >
-          Analyst
+          AI analyst
         </h2>
         <p className="font-mono text-[11px] text-muted">
           {isLive
             ? "live, on your key"
             : placeholder
-              ? "sample sessions until a real run is recorded"
+              ? "pre-written sample sessions"
               : "recorded Claude Opus 5.5 sessions"}
         </p>
       </header>
@@ -472,8 +504,12 @@ export function AnalystPanel({
       <div className="grid gap-x-6 gap-y-3 p-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
         <div className="flex min-w-0 flex-col gap-2">
           <p className="text-xs leading-relaxed text-muted">
-            The analyst sees ticker names and four tools, and no numbers. Every figure it quotes has
-            to come back from the risk engine, and code checks each one afterwards.
+            The analyst starts with the ticker names and no numbers. To quote a figure it has to ask
+            the risk engine for it (a tool call), and code checks every number in its answer
+            afterwards.
+          </p>
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted">
+            Pick a question
           </p>
           <div className="flex flex-col gap-1.5 sm:flex-row sm:flex-wrap">
             {presets.map((preset) => (
@@ -536,7 +572,9 @@ export function AnalystPanel({
             <button
               type="submit"
               disabled={!isLive || busy || !draft.trim()}
-              className="shrink-0 bg-accent px-3 py-2 font-mono text-xs font-medium text-accent-fg disabled:cursor-not-allowed disabled:opacity-40"
+              className={`shrink-0 px-3 py-2 font-mono text-xs font-medium disabled:cursor-not-allowed disabled:opacity-50 ${
+                isLive ? "bg-accent text-accent-fg" : "border border-border text-muted"
+              }`}
             >
               Ask
             </button>
@@ -546,15 +584,15 @@ export function AnalystPanel({
               "Runs on your key. The cost is shown when it finishes."
             ) : (
               <>
-                Free-form questions call Claude, so they need a key.{" "}
+                Your own questions call Claude live, so they need a key.{" "}
                 <button
                   type="button"
                   onClick={openKeyModal}
-                  className="text-accent underline underline-offset-2"
+                  className="text-fg underline decoration-border underline-offset-2 hover:decoration-fg"
                 >
                   Add your key
                 </button>{" "}
-                or pick a preset.
+                or pick one of the questions.
               </>
             )}
           </p>

@@ -24,7 +24,7 @@ export const analystFixtures = fixtures as unknown as FixtureStore<Session, Anal
 /** True while any bundled session is a hand-written sample rather than a recorded run. */
 export const analystPlaceholder = Object.values(analystFixtures).some((f) => f.placeholder);
 
-export function analystRoute(replaySpeed = 4) {
+export function analystRoute(replaySpeed = 3) {
   return streamRoute({
     store: "analyst",
     fixtures: analystFixtures,

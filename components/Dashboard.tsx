@@ -16,6 +16,13 @@ import { useKey } from "./kit/KeyProvider";
 import { Card } from "./ui";
 import { useAnalyst } from "./useAnalyst";
 
+/** Who does what, in the order it happens. Code owns every number; the model only explains. */
+const HOW_IT_WORKS = [
+  { who: "Code", what: "computes the risk numbers from five years of daily prices." },
+  { who: "AI analyst", what: "explains them, asking the risk engine for each number it needs." },
+  { who: "Code", what: "checks every number the analyst quotes and links it to its source." },
+];
+
 export function Dashboard({
   sample,
   presets,
@@ -79,56 +86,103 @@ export function Dashboard({
       id="main"
       className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col gap-3 px-3 py-3 sm:px-4"
     >
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border border-border bg-surface px-3 py-2.5">
-        <div className="min-w-0">
-          <h1 className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
-            {uploaded ? "Your holdings" : "Sample portfolio"}
-          </h1>
-          <p className="mt-0.5 text-sm text-fg">
-            {count(analysis.holdings.length)} holdings, {usd(analysis.totalValue)}
-            {analysis.valueAssumed && (
-              <span className="text-muted"> (assumed: the file had weights only)</span>
-            )}
-            <span className="text-muted">
-              {" "}
-              {"·"} {month(analysis.dataset.start)} to {month(analysis.dataset.end)},{" "}
-              {count(analysis.dataset.tradingDays)} trading days
-            </span>
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {uploaded ? (
+      <section aria-labelledby="intro-title" className="border border-border bg-surface">
+        <div className="grid gap-x-10 gap-y-4 px-4 py-4 sm:px-5 sm:py-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+          <div className="min-w-0">
+            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
+              Portfolio risk report
+            </p>
+            <h1
+              id="intro-title"
+              className="mt-1.5 text-2xl font-semibold leading-tight tracking-tight text-fg sm:text-[1.75rem]"
+            >
+              {uploaded
+                ? "A risk report for your holdings"
+                : "A risk report for a sample stock portfolio"}
+            </h1>
+            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted sm:text-[15px]">
+              Code computes every number on this page. An AI analyst (Claude) explains what they
+              mean, and every number it quotes links to the calculation it came from.
+            </p>
+          </div>
+          <div className="flex flex-col items-start gap-2 lg:items-end">
             <button
               type="button"
-              onClick={() => show(null)}
-              className="border border-border px-3 py-2 font-mono text-xs text-fg hover:bg-raised"
+              data-cta="play"
+              onClick={play}
+              disabled={busy || !canPlay}
+              title={canPlay ? undefined : "Add your key to run the analyst on your own holdings"}
+              className="inline-flex items-center gap-2 bg-accent px-5 py-3 font-mono text-sm font-semibold text-accent-fg shadow-sm hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Back to the sample
+              <span aria-hidden>{"▶"}</span>
+              {busy ? "Playing…" : playLabel}
             </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setUploading(true)}
-              className="border border-border px-3 py-2 font-mono text-xs text-fg hover:bg-raised"
-            >
-              Load your holdings
-            </button>
-          )}
-          <button
-            type="button"
-            data-cta="play"
-            onClick={play}
-            disabled={busy || !canPlay}
-            title={canPlay ? undefined : "Add your key to run the analyst on your own holdings"}
-            className="bg-accent px-3 py-2 font-mono text-xs font-medium text-accent-fg hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            <span aria-hidden>{"▶ "}</span>
-            {busy ? "Running…" : playLabel}
-          </button>
+            <p className="text-xs text-muted">
+              {isLive
+                ? "Runs live on your key; the cost is shown at the end."
+                : "Takes about five seconds. No key or sign-up."}{" "}
+              {uploaded ? (
+                <button
+                  type="button"
+                  onClick={() => show(null)}
+                  className="text-fg underline decoration-border underline-offset-2 hover:decoration-fg"
+                >
+                  Back to the sample
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setUploading(true)}
+                  className="text-fg underline decoration-border underline-offset-2 hover:decoration-fg"
+                >
+                  Or load your own holdings
+                </button>
+              )}
+            </p>
+          </div>
         </div>
-      </div>
+        <ol
+          aria-label="How it works"
+          className="grid border-t border-border text-xs leading-snug sm:grid-cols-3"
+        >
+          {HOW_IT_WORKS.map((step, i) => (
+            <li
+              key={i}
+              className="flex items-baseline gap-2 border-border px-4 py-2 sm:px-5 sm:py-2.5 [&:not(:first-child)]:border-t sm:[&:not(:first-child)]:border-l sm:[&:not(:first-child)]:border-t-0"
+            >
+              {i > 0 && (
+                <span aria-hidden className="font-mono text-muted">
+                  {"→"}
+                </span>
+              )}
+              <span>
+                <span className="font-mono text-[11px] font-medium uppercase tracking-[0.1em] text-accent">
+                  {step.who}
+                </span>{" "}
+                <span className="text-fg/85">{step.what}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-      <MetricTiles analysis={analysis} />
+      <section aria-labelledby="numbers-title" className="min-w-0 border border-border bg-surface">
+        <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-border px-3 py-2 sm:px-4">
+          <h2
+            id="numbers-title"
+            className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-fg"
+          >
+            {uploaded ? "Your holdings" : "The sample portfolio"}
+          </h2>
+          <p className="text-xs text-muted">
+            {count(analysis.holdings.length)} holdings, {usd(analysis.totalValue)}
+            {analysis.valueAssumed && " (assumed: the file had weights only)"} {"·"} daily prices,{" "}
+            {month(analysis.dataset.start)} to {month(analysis.dataset.end)}
+            {analysis.dataset.synthetic && " (simulated)"}
+          </p>
+        </header>
+        <MetricTiles analysis={analysis} />
+      </section>
 
       <AnalystPanel
         analyst={analyst}
@@ -140,13 +194,17 @@ export function Dashboard({
 
       <div className="grid gap-3 lg:grid-cols-3">
         <div className="flex min-w-0 flex-col gap-3 lg:col-span-2">
-          <Card id="drawdown" title="Drawdown" aside={`vs ${analysis.assumptions.benchmark}`}>
+          <Card
+            id="drawdown"
+            title="Drawdown"
+            aside={`growth, and each fall from a high, vs the market (${analysis.assumptions.benchmark})`}
+          >
             <PerformanceChart analysis={analysis} />
           </Card>
           <Card
             id="frontier"
             title="Simulated frontier"
-            aside="risk, return, worst fall"
+            aside="random mixes of the same holdings: risk against return"
             className="flex-1"
             fill
           >
@@ -164,12 +222,17 @@ export function Dashboard({
           <Card
             id="montecarlo"
             title="Monte Carlo, one year"
-            aside="resampled history"
+            aside={`${count(analysis.monteCarlo.simulations)} possible next years`}
             note="Each path resamples real days from the history, so fat tails are kept, but losses do not cluster the way they do in a real sell-off. The dark band holds half the paths, the light band nine tenths."
           >
             <MonteCarloFan analysis={analysis} />
           </Card>
-          <Card id="correlation" title="Correlation" aside="daily returns" className="flex-1">
+          <Card
+            id="correlation"
+            title="Correlation"
+            aside="which holdings move together"
+            className="flex-1"
+          >
             <CorrelationHeatmap analysis={analysis} />
           </Card>
         </div>

@@ -28,8 +28,8 @@ export default function Home() {
           <span className="font-mono text-sm font-semibold tracking-[0.22em] text-fg">
             DRAWDOWN
           </span>
-          <span className="hidden truncate text-xs text-muted sm:inline">
-            A risk engine computes every number. Claude explains them.
+          <span className="hidden truncate font-mono text-[11px] text-muted sm:inline">
+            portfolio risk, explained
           </span>
         </p>
         <ThemeToggle />
