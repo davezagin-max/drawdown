@@ -112,7 +112,8 @@ To deploy: the Next.js app goes to Vercel as it is (`server/` is ignored there).
 
 ```bash
 pnpm check                                  # lint, typecheck, 85 unit tests, production build
-cd server && uv run pytest -q               # 191 tests
+pnpm functional                             # clicks through the built app; start it first (pnpm exec next start -p 3300)
+cd server && uv run pytest -q               # 194 tests
 cd server && uv run ruff check . && uv run ruff format --check . && uv run mypy
 ```
 
