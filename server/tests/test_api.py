@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 
 from app import demo, risk
 from app.http import Live, RateLimiter, get_client, respond_stream
-from app.main import app
+from app.main import analyst_limit, app
 from app.portfolio import Portfolio, normalize
 from app.prices import load_prices
 from app.schema import Session
@@ -66,10 +66,26 @@ def test_portfolio_never_echoes_markup_from_a_file() -> None:
 
 
 def test_portfolio_caps_the_upload() -> None:
-    too_long = "ticker,value\n" + "AAPL,1\n" * 5000  # over the 32,000 character field limit
-    assert client.post("/api/portfolio", json={"csv": too_long}).status_code == 400
+    too_long = "ticker,value\n" + "AAPL,1\n" * 5000  # about 40 KB: over the 32 KB file limit
+    res = client.post("/api/portfolio", json={"csv": too_long})
+    assert res.status_code == 400
+    assert res.json()["error"] == {
+        "kind": "invalid",
+        "message": "The file is too large (limit 32 KB).",
+    }
     huge = b'{"csv":"' + b"a" * 70_000 + b'"}'  # over the 64 KB body limit
-    assert client.post("/api/portfolio", content=huge).status_code == 413
+    res = client.post("/api/portfolio", content=huge)
+    assert res.status_code == 413
+    assert res.json()["error"]["kind"] == "too_large"
+
+
+def test_portfolio_explains_a_body_without_a_csv_field() -> None:
+    res = client.post("/api/portfolio", json={"holdings": CSV})
+    assert res.status_code == 400
+    assert res.json()["error"] == {
+        "kind": "invalid",
+        "message": "Request body has an invalid shape.",
+    }
 
 
 # --- /api/analyst in demo mode ------------------------------------------------------
@@ -109,6 +125,25 @@ def test_a_preset_is_never_replayed_for_someone_elses_holdings() -> None:
     )
     assert res.status_code == 404
     assert res.json()["error"]["kind"] == "demo_miss"
+
+
+def test_analyst_refuses_an_oversized_body_before_reading_it() -> None:
+    huge = b'{"demoId":"risk-sources","question":"' + b"q" * 70_000 + b'"}'
+    res = client.post("/api/analyst", content=huge)
+    assert res.status_code == 413
+    assert res.json()["error"]["kind"] == "too_large"
+
+
+def test_rate_limit_answers_with_the_error_envelope() -> None:
+    app.dependency_overrides[analyst_limit] = RateLimiter(limit=1, window_seconds=60)
+    body = {"demoId": "risk-sources", "question": "Where is the risk coming from?"}
+    assert client.post("/api/analyst", json=body).status_code == 200
+    res = client.post("/api/analyst", json=body)
+    assert res.status_code == 429
+    assert res.json()["error"] == {
+        "kind": "rate_limit",
+        "message": "Too many requests. Wait a moment.",
+    }
 
 
 def test_malformed_key_is_rejected_and_not_echoed() -> None:

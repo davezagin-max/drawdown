@@ -26,7 +26,6 @@ from .config import Usage
 from .frontier import simulate_frontier
 from .http import Live, RateLimiter, create_app, get_client, respond_stream
 from .portfolio import (
-    MAX_CSV_BYTES,
     MAX_HOLDINGS,
     SAMPLE_TOTAL_VALUE,
     HoldingsError,
@@ -57,7 +56,9 @@ NO_CALL_META = {
 
 
 class PortfolioBody(BaseModel):
-    csv: str = Field(min_length=1, max_length=MAX_CSV_BYTES)
+    # No max_length here: a field cap fails as a generic shape error. parse_holdings_csv checks
+    # the size in bytes and explains the limit; the 64 KB body cap bounds the request itself.
+    csv: str = Field(min_length=1)
 
 
 class HoldingIn(BaseModel):
