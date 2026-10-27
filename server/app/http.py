@@ -104,7 +104,9 @@ class RateLimiter:
         if demo.recording_enabled():
             return
         forwarded = request.headers.get("x-forwarded-for", "")
-        ip = forwarded.split(",")[-1].strip() or (request.client.host if request.client else "local")
+        ip = forwarded.split(",")[-1].strip() or (
+            request.client.host if request.client else "local"
+        )
         if not self.check(ip):
             raise HTTPException(status_code=429, detail="Too many requests. Wait a moment.")
 
